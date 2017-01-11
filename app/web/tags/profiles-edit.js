@@ -14,20 +14,6 @@
           <textarea onchange={ parent.fieldChange } class="form-control" rows=4 name="description" placeholder="enter description...">{ parent.profile.description }</textarea>
         </form-group>
 
-        <form-group label="Fields">
-          <div class="input-group">
-            <input type="text" class="form-control" placeholder="add field...">
-            <span class="input-group-btn">
-              <button onclick={ parent.addField } type="button" class="btn btn-primary">
-                <span class="fa fa-plus"></span>
-              </button>
-            </span>
-          </div>
-        </form-group>
-        <key-value-inputs fields={ profile.fields }></key-value-inputs>
-
-        <hr/>
-
         <form-group>
           <button type="submit" class="btn btn-primary">Save</button>
           <button onclick={ parent.cancel } type="button" class="btn btn-default">Cancel</button>
@@ -61,7 +47,7 @@
 
     this.on('fields:changed', function(data) {
       if(data.fields) {
-        self.update({ fields: data.fields })
+        self.profile.fields = data.fields
       }
     })
 

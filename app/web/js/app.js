@@ -14,7 +14,17 @@
       var data = {};
       Object.keys(record)
         .filter(function(k) { return !k.startsWith("_") })
-        .forEach(function(key) { data[key] = record[key] });
+        .forEach(function(key) {
+          if(['bases_profile','profile','template'].indexOf(key) >= 0) {
+            if(typeof(record[key]) !== 'string') {
+              data[key] = record[key]._id
+            } else {
+              data[key] = record[key]
+            }
+          } else {
+            data[key] = record[key]
+          }
+        });
 
       var options = $.extend({}, {
         url: [self.base,collection,record._id].join('/').replace('//','/'),
@@ -28,8 +38,19 @@
       $.ajax(options).then(function(resp) {
         var parsed = self.parse(resp);
         for(var attr in parsed) { record[attr] = parsed[attr]; }
+        self.notice.saved(record)
         cb(record)
       });
+    },
+    notice: {
+      saved: function(record) {
+        Alert({
+          title: "Success!",
+          body: "'"+(record.title || record.name || record._id) + "' was saved at " + record._updated,
+          color: "success",
+          classes: "col-xs-3"
+        })
+      }
     },
     delete: function(collection, record, overrides, cb) {
       var self = this;

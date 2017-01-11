@@ -14,12 +14,16 @@
           <textarea onchange={ parent.fieldChange } class="form-control" rows=4 name="description" placeholder="summary or description">{ parent.report.description }</textarea>
         </form-group>
 
+        <form-group label="Select Base Profile">
+          <select-option default="--select base--" current={ parent.report.base_profile._id }  fetch={ parent.fetch_profiles } field="base_profile" option_text="name"></select-option>
+        </form-group>
+
         <form-group label="Select Profile">
-          <select-option default="--select profile--" fetch={ parent.fetch_profiles } option_value="name" option_text="name" record={ parent.report } field="profile"></select-option>
+          <select-option default="--select profile--" current={ parent.report.profile._id } fetch={ parent.fetch_profiles } option_text="name" field="profile"></select-option>
         </form-group>
 
         <form-group label="Select Template">
-          <select-option default="--select template--" fetch={ parent.fetch_templates } option_value="name" option_text="name" record={ parent.report } field="template"></select-option>
+          <select-option default="--select template--" current={ parent.report.template._id } fetch={ parent.fetch_templates } option_text="name" field="template"></select-option>
         </form-group>
 
         <form-group>
@@ -37,7 +41,6 @@
     this.save = function(e) {
       e.preventDefault()
       riot.app.save("/reports", self.report, null, function(record) {
-        console.log("SAVED: ", record)
         self.update({ report: record })
       })
     }
@@ -57,9 +60,7 @@
 
     this.on('option:selected', function(data) {
       console.log("option selected", data)
-      var d = {}
-      d[data.field] = data.value
-      self.update(d)
+      self.report[data.field] = data.value
     })
 
     this.cancel = function() {

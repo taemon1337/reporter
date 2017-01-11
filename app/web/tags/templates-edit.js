@@ -45,7 +45,9 @@
         processData: false,
         headers: headers
       }).then(function(resp) {
-        console.log("RESP: ", resp)
+        for(var key in resp) { record[key] = resp[key] }
+        self.update({ record: record })
+        riot.app.notice.saved(record);
       }).catch(function(err) {
         console.error("Error: ", err.stack)
       })

@@ -21,8 +21,9 @@
     this.headers = opts.headers || {
       title: { template: "<a href='/#/reports/{ _id }'>{ title }</a>" },
       description: {},
-      template: {},
-      profile: {}
+      template: { template: "<a href='/#/templates/{ template._id }'>{ template.name }</a>" },
+      profile: { template: "<a href='/#/profiles/{ profile._id }'>{ profile.name }</a>" },
+      base_profile: { template: "<a href='/#/profiles/{ base_profile._id }'>{ base_profile.name }</a>" }
     }
 
     this.record_buttons = opts.record_buttons || [

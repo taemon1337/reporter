@@ -4,7 +4,6 @@ from os import getenv
 from gridfs import GridFS
 from docxtpl import DocxTemplate
 
-
 def get_file(record):
   fs = GridFS(app.data.driver.db)
   return fs.get(record["_id"])
@@ -19,7 +18,6 @@ def stream_document(doc, mimetype="application/octect-stream"):
     return resp
   else:
     return resp, 404
-   
 
 def send_gridfs_file(record):
   resp = Response()
@@ -33,6 +31,73 @@ def send_gridfs_file(record):
     return resp
   else:
     return resp, 404
+
+template_schema = {
+  'name': {
+    'type': 'string',
+    'required': True,
+    'unique': True
+  },
+  'description': {
+    'type': 'string'
+  },
+  'file': {
+    'type': 'media'
+  }
+}
+profile_schema = {
+  'name': {
+    'type': 'string',
+    'required': True,
+    'unique': True
+  },
+  'description': {
+    'type': 'string'
+  },
+  'fields': {
+    'type': 'dict',
+    'default': {}
+  }
+}
+report_schema = {
+  'title': {
+    'type': 'string',
+    'required': True,
+    'unique': True
+  },
+  'description': {
+    'type': 'string'
+  },
+  'fields': {
+    'type': 'dict',
+    'default': {}
+  },
+  'base_profile': {
+    'type': 'objectid',
+    'data_relation': {
+      'resource': 'profiles',
+      'field': '_id',
+      'embeddable': True
+    }
+  },
+  'profile': {
+    'type': 'objectid',
+    'data_relation': {
+      'resource': 'profiles',
+      'field': '_id',
+      'embeddable': True
+    }
+  },
+  'template': {
+    'type': 'objectid',
+    'data_relation': {
+      'resource': 'templates',
+      'field': '_id',
+      'embeddable': True
+    }
+  }
+}
+
 
 settings = {
   'URL_PREFIX': 'api',
@@ -50,63 +115,21 @@ settings = {
   'DATE_FORMAT': '%Y-%m-%d %H:%M:%S',
   'DOMAIN': {
     'templates': {
-      'schema': {
-        'name': {
-          'type': 'string',
-          'required': True,
-          'unique': True
-        },
-        'description': {
-          'type': 'string'
-        },
-        'file': {
-          'type': 'media'
-        }
-      }
+      'schema': template_schema
     },
     'profiles': {
-      'schema': {
-        'name': {
-          'type': 'string',
-          'required': True,
-          'unique': True
-        },
-        'description': {
-          'type': 'string'
-        },
-        'fields': {
-          'type': 'dict',
-          'default': {}
-        }
+      'schema': profile_schema
+    },
+    'profile-fields': {
+      'schema': profile_schema,
+      'datasource': {
+        'source': 'profiles',
+        'projection': { 'fields': 1 }
       }
     },
     'reports': {
-      'schema': {
-        'title': {
-          'type': 'string',
-          'required': True,
-          'unique': True
-        },
-        'description': {
-          'type': 'string'
-        },
-        'profile': {
-          'type': 'string',
-          'data_relation': {
-            'resource': 'profiles',
-            'field': 'name',
-            'embeddable': True
-          }
-        },
-        'template': {
-          'type': 'string',
-          'data_relation': {
-            'resource': 'templates',
-            'field': 'name',
-            'embeddable': True
-          }
-        }
-      }
+      'embedded_fields': ['template','profile','base_profile'],
+      'schema': report_schema
     }
   }
 }
