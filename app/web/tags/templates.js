@@ -36,7 +36,7 @@
       this.update({ tag: e.target.id })
     }
 
-    this.fetch = function(cb) { riot.app.fetch("/templates", null, null, cb) }
+    this.fetch = function(cb) { riot.app.fetch("templates", null, null, cb) }
 
     this.help = function() {
       var body = ["<h3>A template is a Office Document that you upload.<br</h3>"]
@@ -50,7 +50,7 @@
     this.on('template:delete', function(record) {
       var a = confirm('Are you sure you want to delete Case ' + record.title + '?')
       if(a) {
-        riot.app.delete('/templates', record, null, function() {
+        riot.app.delete('templates', record, null, function() {
           self.tags['riot-table'].reload()
         })
       }

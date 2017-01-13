@@ -27,7 +27,6 @@ riot.compile(function() {
 
     app.fetch(collection, id, action, function(resp) {
       opts[id ? singular : collection] = resp;
-      console.log(tag, opts)
       mount(tag, opts);
     })
   }

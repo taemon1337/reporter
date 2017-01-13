@@ -43,12 +43,12 @@
       Popup({ title: "What is a profile?", body: body.join('<br>') })
     }
 
-    this.fetch = function(cb) { riot.app.fetch("/profiles", null, null, cb) }
+    this.fetch = function(cb) { riot.app.fetch("profiles", null, null, cb) }
 
     this.on('profile:delete', function(record) {
       var a = confirm('Are you sure you want to delete ' + record.name + '?')
       if(a) {
-        riot.app.delete('/profiles', record, null, function() {
+        riot.app.delete('profiles', record, null, function() {
           self.tags['riot-table'].reload()
         })
       }

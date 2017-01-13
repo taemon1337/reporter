@@ -1,25 +1,17 @@
 <reports-show>
   <div class="form-horizontal col-xs-12">
     <div class="pull-right">
+      <a href="/api/reports/{ report._id }/download" class="btn btn-primary">Download</a>
       <a href="/#/reports/{ report._id }/edit" class="btn btn-primary">Edit</a>
     </div>
 
-    <h1>{ report.title }</h1>
-    <small>{ report.description }</small>
+    <h1>
+      { report.title }
+      <small>{ report.description }</small>
+    </h1>
     <hr/>
     <h3>Report Fields</h3>
-
-    <form-group label="Fields">
-      <div class="input-group">
-        <input onkeyup={ parent.keyup } type="text" class="form-control" placeholder="add field...">
-        <span class="input-group-btn">
-          <button onclick={ parent.addField } type="button" class="btn btn-primary">
-            <span class="fa fa-plus"></span>
-          </button>
-        </span>
-      </div>
-    </form-group>
-    <key-value-inputs fields={ report.fields }></key-value-inputs>
+    <json-tree field="fields" object={ report.fields }></json-tree>
 
   </div>
 
@@ -39,13 +31,11 @@
       setTimeout(function() { input.val('') }, 100)
     }
 
-    self.on('fields:changed', function(data) {
-      if(data.fields) {
-        self.report.fields = data.fields
-        riot.app.save("reports", self.report,{ method: "PUT" }, function(resp) {
-          self.update({ report: resp })
-        })
-      }
+    self.on('tree:change', function(data) {
+      self.report.fields = data.object
+      riot.app.save("reports", self.report, { method: "PUT" }, function(resp) {
+        self.update({ report: resp })
+      })
     })
   </script>
 </reports-show>

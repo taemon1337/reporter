@@ -15,7 +15,7 @@
       Object.keys(record)
         .filter(function(k) { return !k.startsWith("_") })
         .forEach(function(key) {
-          if(['bases_profile','profile','template'].indexOf(key) >= 0) {
+          if(['base_profile','profile','template'].indexOf(key) >= 0) {
             if(typeof(record[key]) !== 'string') {
               data[key] = record[key]._id
             } else {
@@ -64,14 +64,15 @@
         headers: headers
       }, overrides);
 
-      $.ajax(options).then(function(resp) { cb(self.parse(resp)) });
+      $.ajax(options).then(function(resp) { cb(self.parse(resp)) })
+      .catch(cb);
     },
     fetch: function(collection, id, action, cb) {
       if(id === 'new') { return cb({}) }
       var self = this;
       var url = [self.base,collection,id].join('/').replace('//','/');
       $.get(url).then(function(resp) {
-        cb(self.parse(resp));
+        cb(self.parse(resp, collection));
       }).catch(function(err) {
         console.warn("Fetch Error: ", err);
       })
@@ -87,8 +88,29 @@
         });
       }
     },
-    parse: function(resp) {
-      return resp && resp._items ? resp._items : resp;
+    parse: function(resp, collection) {
+      if(!resp) {
+        return resp;
+      } else if(resp._items) {
+        var records = [];
+        for(var i=0; i<resp._items.length; i++) {
+          var rec = resp._items[i]
+          if(collection === 'reports') {
+            ["base_profile","profile","template"].forEach(function(key) {
+              rec[key] = rec[key] || {};
+            })
+          }
+          records.push(rec);
+        }
+        return records;
+      } else {
+        if(collection === 'reports') {
+          ["base_profile","profile","template"].forEach(function(key) {
+            resp[key] = resp[key] || {};
+          })
+        }
+        return resp;
+      }
     }
   };
 

@@ -1,23 +1,19 @@
 from eve import Eve
-from flask import current_app, Response 
+from flask import current_app, Response, send_file 
 from os import getenv
 from gridfs import GridFS
+from bson.objectid import ObjectId
 from docxtpl import DocxTemplate
+from io import StringIO
 
-def get_file(record):
+def get_template_file(template):
   fs = GridFS(app.data.driver.db)
-  return fs.get(record["_id"])
+  return fs.get(template["file"])
 
-def stream_document(doc, mimetype="application/octect-stream"):
-  resp = Response()
-  if doc:
-    resp.cache_control.no_store = True
-    resp.cache_control.max_age = 0
-    resp.set_data(doc.read())
-    resp.mimetype = mimetype
-    return resp
-  else:
-    return resp, 404
+def stream_document(doc, filename="download.docx", mimetype="application/octect-stream"):
+  io = StringIO()
+  doc.save(io)
+  return send_file(io, attachment_filename=filename, as_attachment=True)
 
 def send_gridfs_file(record):
   resp = Response()
@@ -136,28 +132,34 @@ settings = {
 
 app = Eve(settings=settings)
 
-@app.route('/download/<report_id>', methods=["GET"])
+@app.route('/api/reports/<report_id>/download', methods=["GET"])
 def download_report(report_id):
   reports = app.data.driver.db['reports']
   templates = app.data.driver.db['templates']
   profiles = app.data.driver.db['profiles']
 
-  report = reports.find_one({ "name": report_id })
+  report = reports.find_one({ "_id": ObjectId(report_id) })
   if report:
-    template = templates.find_one({ "name": report['template'] })
+    template = templates.find_one({ "_id": report['template'] })
     if template:
-      profile = profiles.find_one({ "name": report['profile'] })
-      if profile:
-        tmpl = get_file(template)
-        if tmpl:
-          doc = DocxTemplate(tmpl)
-          doc.render(profile)
-          doc.render(report["fields"])
-          return stream_document(doc, mimetype=template["contentType"])
+      base = profiles.find_one({ "_id": report['base_profile'] })
+      if base:
+        profile = profiles.find_one({ "_id": report['profile'] })
+        if profile:
+          tmpl = get_template_file(template)
+          if tmpl:
+            doc = DocxTemplate(tmpl)
+            options = base.copy()
+            options.update(profile)
+            options.update(report["fields"])
+            doc.render(options)
+            return stream_document(doc, filename=report["title"])# mimetype=template["file"]["content_type"])
+          else:
+            raise Exception("Could not read template: {0}".format(repr(template)))
         else:
-          raise Exception("Could not read template: {0}".format(repr(template)))
+          raise Exception("Could not find profile: {0}".format(report['profile']))
       else:
-        raise Exception("Could not find profile: {0}".format(report['profile']))
+        raise Exception("Could not find base profile: {0}".format(report['base_profile']))
     else:
       raise Exception("Could not find template: {0}".format(report['template']))
   else:

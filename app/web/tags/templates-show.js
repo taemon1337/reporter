@@ -3,10 +3,13 @@
     <div class="pull-right">
       <a href="/#/templates/{ template._id }/edit" class="btn btn-primary">Edit</a>
     </div>
-    <h1>{ template.name }</h1>
-    <small>{ template.description }</small>
+    <h1>
+      { template.name }
+      <small>{ template.description }</small>
+    </h1>
     <hr/>
   </div>
+
   <div class="row">
     <div class="col-xs-6">
       <div class="panel panel-default">
@@ -34,5 +37,9 @@
 
   <script>
     this.template = opts.template
+
+    this.on('tree:change', function(data) {
+      console.log('TEMPLATE CHANGED: ', data)
+    })
   </script>
 </templates-show>

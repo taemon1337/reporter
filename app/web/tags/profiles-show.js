@@ -4,8 +4,10 @@
       <a href="/#/profiles/{ profile._id }/edit" class="btn btn-primary">Edit</a>
     </div>
 
-    <h1>{ profile.name }</h1>
-    <small>{ profile.description }</small>
+    <h1>
+      { profile.name }
+      <small>{ profile.description }</small>
+    </h1>
     <hr/>
     <h3>Profile Fields</h3>
 

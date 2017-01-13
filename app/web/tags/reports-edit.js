@@ -40,7 +40,7 @@
 
     this.save = function(e) {
       e.preventDefault()
-      riot.app.save("/reports", self.report, null, function(record) {
+      riot.app.save("reports", self.report, null, function(record) {
         self.update({ report: record })
       })
     }

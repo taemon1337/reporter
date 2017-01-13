@@ -2,13 +2,10 @@
   <div class="row">
     <div class="col-xs-12">
       <form onsubmit={ save } method="post" action="/api/templates/{ template._id }" class="form-horizontal" enctype="multipart/form-data">
-        <form-group if={ template._id } label="Template File">
-          <input class="form-control" type="text" value="{ parent.template.file.name }" readonly="true">
+        <form-group label="Template File">
+          <input onclick={ parent.openDialog } class="form-control" type="text" value="{ parent.file.name }" readonly="true">
         </form-group>
-
-        <form-group if={ !template._id } label="Template File">
-          <input class="form-control" type="file" name="file" />
-        </form-group>
+        <input onchange={ fileSelected } class="hidden" type="file" />
 
         <form-group label="Name">
           <input type="text" class="form-control" placeholder="name the template..." name="name" value={ parent.template.name }>
@@ -29,13 +26,14 @@
   <script>
     var self = this
     this.template = opts.template || {}
+    this.file = opts.file || opts.template.file || {}
 
     this.save = function(e) {
-      console.log(e.target.method)
       e.preventDefault()
       var record = self.template
       var formdata = new FormData(e.target);
       var headers = self.template._etag ? { "If-Match": self.template._etag } : {}
+      if(self.file instanceof File) { formdata.append("file", self.file) }
 
       $.ajax({
         url: e.target.action,
@@ -56,6 +54,16 @@
     this.fieldChange = function(e) {
       self.template[e.target.name] = $(e.target).val()
       self.update({ template: self.template })
+    }
+
+    this.openDialog = function() {
+      $("input[type='file']").click()
+    }
+
+    this.fileSelected = function(e) {
+      if(e.target.files && e.target.files.length === 1) {
+        self.update({ file: e.target.files[0] })
+      }
     }
 
     this.cancel = function() {
