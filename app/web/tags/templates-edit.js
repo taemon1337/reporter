@@ -15,6 +15,10 @@
           <textarea class="form-control" rows=4 name="description" placeholder="summary or description">{ parent.template.description }</textarea>
         </form-group>
 
+        <form-group label="Select Profile">
+          <select-option default="--select profile--" current={ (parent.template.profile || {})._id } fetch={ parent.fetch_profiles } option_text="name" field="profile"></select-option>
+        </form-group>
+
         <form-group>
           <button type="submit" class="btn btn-primary">Save</button>
           <button onclick={ parent.cancel } type="button" class="btn btn-default">Cancel</button>
@@ -25,7 +29,7 @@
 
   <script>
     var self = this
-    this.template = opts.template || {}
+    this.template = opts.template
     this.file = opts.file || opts.template.file || {}
 
     this.save = function(e) {
@@ -34,6 +38,7 @@
       var formdata = new FormData(e.target);
       var headers = self.template._etag ? { "If-Match": self.template._etag } : {}
       if(self.file instanceof File) { formdata.append("file", self.file) }
+      if(record.profile.length === 24) { formdata.append("profile", record.profile) }
 
       $.ajax({
         url: e.target.action,
@@ -65,6 +70,15 @@
         self.update({ file: e.target.files[0] })
       }
     }
+
+    this.fetch_profiles = function(cb) {
+      riot.app.fetch("profiles", null, null, cb)
+    }
+
+    this.on('option:selected', function(data) {
+      console.log("option selected", data)
+      self.template[data.field] = data.value
+    })
 
     this.cancel = function() {
       window.history.back()

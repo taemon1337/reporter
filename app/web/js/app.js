@@ -95,10 +95,11 @@
         var records = [];
         for(var i=0; i<resp._items.length; i++) {
           var rec = resp._items[i]
+          if(collection === 'templates') {
+            rec.profile = rec.profile || {};
+          }
           if(collection === 'reports') {
-            ["base_profile","profile","template"].forEach(function(key) {
-              rec[key] = rec[key] || {};
-            })
+            ["base_profile","profile","template"].forEach(function(key) { rec[key] = rec[key] || {} })
           }
           records.push(rec);
         }

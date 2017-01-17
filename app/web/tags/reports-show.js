@@ -11,7 +11,7 @@
     </h1>
     <hr/>
     <h3>Report Fields</h3>
-    <json-tree field="fields" object={ report.fields }></json-tree>
+    <form-tree field="fields" object={ report.fields }></form-tree>
 
   </div>
 
@@ -19,22 +19,11 @@
     var self = this
     self.report = opts.report
 
-    self.keyup = function(e) {
-      if(e.keyCode === 13) {
-        self.addField(e)
-      }
-    }
-
-    self.addField = function(e) {
-      var input = $(e.target).parents('.input-group').find('input')
-      self.tags['key-value-inputs'].trigger('add', { key: input.val() })
-      setTimeout(function() { input.val('') }, 100)
-    }
-
     self.on('tree:change', function(data) {
       self.report.fields = data.object
       riot.app.save("reports", self.report, { method: "PUT" }, function(resp) {
-        self.update({ report: resp })
+        for(var key in resp) { self.report[key] = resp[key] }
+        self.update({ report: self.report })
       })
     })
   </script>

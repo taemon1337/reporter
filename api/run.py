@@ -4,16 +4,17 @@ from os import getenv
 from gridfs import GridFS
 from bson.objectid import ObjectId
 from docxtpl import DocxTemplate
-from io import StringIO
+from io import BytesIO, StringIO
 
 def get_template_file(template):
   fs = GridFS(app.data.driver.db)
   return fs.get(template["file"])
 
 def stream_document(doc, filename="download.docx", mimetype="application/octect-stream"):
-  io = StringIO()
-  doc.save(io)
-  return send_file(io, attachment_filename=filename, as_attachment=True)
+  buff = BytesIO()
+  doc.save(buff)
+  buff.seek(0)
+  return send_file(buff, attachment_filename=filename, as_attachment=True)
 
 def send_gridfs_file(record):
   resp = Response()
@@ -36,6 +37,14 @@ template_schema = {
   },
   'description': {
     'type': 'string'
+  },
+  'profile': {
+    'type': 'objectid',
+    'data_relation': {
+      'resource': 'profiles',
+      'field': '_id',
+      'embeddable': True
+    }
   },
   'file': {
     'type': 'media'
@@ -111,6 +120,7 @@ settings = {
   'DATE_FORMAT': '%Y-%m-%d %H:%M:%S',
   'DOMAIN': {
     'templates': {
+      'embedded_fields': ['profile'],
       'schema': template_schema
     },
     'profiles': {
@@ -152,8 +162,9 @@ def download_report(report_id):
             options = base.copy()
             options.update(profile)
             options.update(report["fields"])
+            app.logger.info("RENDER OPTS: ", repr(options))
             doc.render(options)
-            return stream_document(doc, filename=report["title"])# mimetype=template["file"]["content_type"])
+            return stream_document(doc, filename="{0}.docx".format(report["title"]))
           else:
             raise Exception("Could not read template: {0}".format(repr(template)))
         else:

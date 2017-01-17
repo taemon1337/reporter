@@ -36,10 +36,15 @@
   </div>
 
   <script>
-    this.template = opts.template
+    var self = this
+    self.template = opts.template
 
-    this.on('tree:change', function(data) {
-      console.log('TEMPLATE CHANGED: ', data)
+    self.on('tree:change', function(data) {
+      self.template.fields = data.object
+      riot.app.save("templates", self.template, { method: "PUT" }, function(resp) {
+        for(var key in resp) { self.template[key] = resp[key] }
+        self.update({ template: self.template })
+      })
     })
   </script>
 </templates-show>

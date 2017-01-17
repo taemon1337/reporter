@@ -23,7 +23,8 @@
 
     this.headers = opts.headers || {
       name: { template: "<a href='/#/templates/{ _id }'>{ name }</a>" },
-      description: { template: "{ description.length > 100 ? description.split(' ').slice(0,15).join(' ')+'...' : description }" }
+      description: { template: "{ description.length > 100 ? description.split(' ').slice(0,15).join(' ')+'...' : description }" },
+      profile: { template: "<a href='/#/profiles/{ profile ? profile._id : '' }'>{ profile ? profile.name : '' }</a>" }
     }
 
     this.record_buttons = opts.record_buttons || [
