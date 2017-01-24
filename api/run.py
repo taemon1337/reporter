@@ -103,13 +103,15 @@ report_schema = {
   }
 }
 
+MONGO_HOST = getenv("MONGO_HOST","mongo")
+MONGO_PORT = int(getenv("MONGO_PORT", "27017"))
+MONGO_DBNAME = getenv("MONGO_DBNAME","reporter-db")
 
 settings = {
   'URL_PREFIX': 'api',
-  'RESOURCE_METHODS': ['GET','POST'],
-  'MONGO_HOST': 'mongo',
-  'MONGO_PORT': 27017,
-  'MONGO_DBNAME': 'reporter-db',
+  'MONGO_HOST': MONGO_HOST,
+  'MONGO_PORT': MONGO_PORT,
+  'MONGO_DBNAME': MONGO_DBNAME,
   'RESOURCE_METHODS': ['GET','POST'],
   'ITEM_METHODS': ['GET','PUT','PATCH','DELETE'],
 #  'MULTIPART_FORM_FIELDS_AS_JSON': True,
