@@ -28,7 +28,7 @@
 
     this.save = function(e) {
       e.preventDefault()
-      riot.app.save("/profiles", self.profile, null, function(record) {
+      riot.app.save("profiles", self.profile, null, function(record) {
         console.log("SAVED: ", record)
         self.update({ profile: record })
       })

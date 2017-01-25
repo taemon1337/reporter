@@ -5,7 +5,7 @@
         <button onclick={ help } type="button" class="btn btn-default">
           What is a template?
         </button>
-        <a href="/#/templates/new/edit" class="btn btn-primary">
+        <a href="./#/templates/new/edit" class="btn btn-primary">
           New Template
           <span class="fa fa-plus"></span>
         </a>
@@ -22,14 +22,14 @@
     this.templates = opts.templates || []
 
     this.headers = opts.headers || {
-      name: { template: "<a href='/#/templates/{ _id }'>{ name }</a>" },
+      name: { template: "<a href='./#/templates/{ _id }'>{ name }</a>" },
       description: { template: "{ description.length > 100 ? description.split(' ').slice(0,15).join(' ')+'...' : description }" },
-      profile: { template: "<a href='/#/profiles/{ profile ? profile._id : '' }'>{ profile ? profile.name : '' }</a>" }
+      profile: { template: "<a href='./#/profiles/{ profile ? profile._id : '' }'>{ profile ? profile.name : '' }</a>" }
     }
 
     this.record_buttons = opts.record_buttons || [
-      { text: "Open", fa: "eye", href: function(record) { return '/#/templates/'+record._id }},
-      { text: "Edit", fa: "pencil", href: function(record) { return '/#/templates/'+record._id+'/edit' }},
+      { text: "Open", fa: "eye", href: function(record) { return './#/templates/'+record._id }},
+      { text: "Edit", fa: "pencil", href: function(record) { return './#/templates/'+record._id+'/edit' }},
       { text: "Delete", fa: "trash", event: "template:delete" }
     ]
 

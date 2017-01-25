@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-xs-12">
       <div class="pull-right">
-        <a href="/#/reports/new/edit" class="btn btn-primary">
+        <a href="./#/reports/new/edit" class="btn btn-primary">
           New Report
           <span class="fa fa-plus"></span>
         </a>
@@ -19,18 +19,18 @@
     this.reports = opts.reports || []
 
     this.headers = opts.headers || {
-      title: { template: "<a href='/#/reports/{ _id }'>{ title }</a>" },
+      title: { template: "<a href='./#/reports/{ _id }'>{ title }</a>" },
       description: {},
-      template: { template: "<a href='/#/templates/{ template._id }'>{ template.name }</a>" },
-      profile: { template: "<a href='/#/profiles/{ profile ? profile._id : '' }'>{ profile ? profile.name : '' }</a>" },
-      base_profile: { text: "BASE PROFILE", template: "<a href='/#/profiles/{ base_profile ? base_profile._id : '' }'>{ base_profile ? base_profile.name : '' }</a>" }
+      template: { template: "<a href='./#/templates/{ template._id }'>{ template.name }</a>" },
+      profile: { template: "<a href='./#/profiles/{ profile ? profile._id : '' }'>{ profile ? profile.name : '' }</a>" },
+      base_profile: { text: "BASE PROFILE", template: "<a href='./#/profiles/{ base_profile ? base_profile._id : '' }'>{ base_profile ? base_profile.name : '' }</a>" }
     }
 
     this.record_buttons = opts.record_buttons || [
-      { text: "Open", fa: "eye", href: function(record) { return '/#/reports/'+record._id }},
-      { text: "Edit", fa: "pencil", href: function(record) { return '/#/reports/'+record._id+'/edit' }},
+      { text: "Open", fa: "eye", href: function(record) { return './#/reports/'+record._id }},
+      { text: "Edit", fa: "pencil", href: function(record) { return './#/reports/'+record._id+'/edit' }},
       { text: "Delete", fa: "trash", event: "report:delete" },
-      { text: "Download", fa: "download", href: function(record) { return "/api/reports/"+record._id+"/download" }}
+      { text: "Download", fa: "download", href: function(record) { return "./api/reports/"+record._id+"/download" }}
     ]
 
     this.toggleView = function(e) {

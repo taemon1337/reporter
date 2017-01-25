@@ -1,7 +1,7 @@
 <templates-edit>
   <div class="row">
     <div class="col-xs-12">
-      <form onsubmit={ save } method="post" action="/api/templates/{ template._id }" class="form-horizontal" enctype="multipart/form-data">
+      <form onsubmit={ save } method="post" action="./api/templates/{ template._id }" class="form-horizontal" enctype="multipart/form-data">
         <form-group label="Template File">
           <input onclick={ parent.openDialog } class="form-control" type="text" value="{ parent.file.name }" readonly="true">
         </form-group>

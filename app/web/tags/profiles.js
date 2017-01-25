@@ -5,7 +5,7 @@
         <button onclick={ help } type="button" class="btn btn-default">
           What is a profile?
         </button>
-        <a href="/#/profiles/new/edit" class="btn btn-primary">
+        <a href="./#/profiles/new/edit" class="btn btn-primary">
           New Profile
           <span class="fa fa-plus"></span>
         </a>
@@ -22,13 +22,13 @@
     this.profiles = opts.profiles || []
 
     this.headers = opts.headers || {
-      name: { template: "<a href='/#/profiles/{ _id }'>{ name }</a>" },
+      name: { template: "<a href='./#/profiles/{ _id }'>{ name }</a>" },
       description: {}
     }
 
     this.record_buttons = opts.record_buttons || [
-      { text: "Open", fa: "eye", href: function(record) { return '/#/profiles/'+record._id }},
-      { text: "Edit", fa: "pencil", href: function(record) { return '/#/profiles/'+record._id+'/edit' }},
+      { text: "Open", fa: "eye", href: function(record) { return './#/profiles/'+record._id }},
+      { text: "Edit", fa: "pencil", href: function(record) { return './#/profiles/'+record._id+'/edit' }},
       { text: "Delete", fa: "trash", event: "profile:delete" }
     ]
 

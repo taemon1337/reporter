@@ -3,7 +3,7 @@
   function App(opts) {
     opts = opts || {};
     riot.observable(this);
-    this.base = opts.base || "/api";
+    this.base = opts.base || "./api";
     this._cache = opts._cache || {};
   }
 

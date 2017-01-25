@@ -1,7 +1,7 @@
 <templates-show>
   <div class="col-xs-12">
     <div class="pull-right">
-      <a href="/#/templates/{ template._id }/edit" class="btn btn-primary">Edit</a>
+      <a href="./#/templates/{ template._id }/edit" class="btn btn-primary">Edit</a>
     </div>
     <h1>
       { template.name }
@@ -16,20 +16,18 @@
         <div class="panel-heading">
           <div class="pull-right">
             <i>{ humanFileSize(template.file.length) }</i>
-            <a href={ template.file.file } download={ template.file.name } title="Download">
+            <a href=".{ template.file.file }" download={ template.file.name } title="Download">
               <span class="fa fa-2x fa-download"></span>
             </a>
           </div>
           <h3 class="panel-title">
-            <a href={ template.file.file } title="Download">
+            <a href=".{ template.file.file }" title="Download">
               { template.file.name }
             </a>
           </h3>
         </div>
         <div class="panel-body">
-          <a href={ template.file }>
-            <pre>{ JSON.stringify(template.file,null,4) }</pre>
-          </a>
+          <pre>{ JSON.stringify(template.file,null,4) }</pre>
         </div>
       </div>
     </div>

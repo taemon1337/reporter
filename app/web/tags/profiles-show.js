@@ -1,7 +1,7 @@
 <profiles-show>
   <div class="form-horizontal col-xs-12">
     <div class="pull-right">
-      <a href="/#/profiles/{ profile._id }/edit" class="btn btn-primary">Edit</a>
+      <a href="./#/profiles/{ profile._id }/edit" class="btn btn-primary">Edit</a>
     </div>
 
     <h1>

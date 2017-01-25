@@ -1,8 +1,8 @@
 <reports-show>
   <div class="form-horizontal col-xs-12">
     <div class="pull-right">
-      <a href="/api/reports/{ report._id }/download" class="btn btn-primary">Download</a>
-      <a href="/#/reports/{ report._id }/edit" class="btn btn-primary">Edit</a>
+      <a href="./api/reports/{ report._id }/download" class="btn btn-primary">Download</a>
+      <a href="./#/reports/{ report._id }/edit" class="btn btn-primary">Edit</a>
     </div>
 
     <h1>
