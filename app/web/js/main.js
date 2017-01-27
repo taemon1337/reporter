@@ -2,6 +2,14 @@ riot.compile(function() {
   var currentTag = null;
   var currentNav = null;
   var app = riot.app = new App();
+  var tabs = [
+    { text: "Inbox", href: "/inbox/", url: true },
+    { text: "Evidence Vault", href: "/evidence-vault/", url: true },
+    { text: "Working Library", href: "/working-library/", url: true },
+    { text: "Outbox", href: "/outbox/", url: true },
+    { text: "Reporter", href: "/reporter/", url: true },
+    { text: "Cases", href: "/caser/", url: true }
+  ]
 
   function mountNavbar(opts) {
     currentNav && currentNav.unmount(true)
@@ -9,7 +17,7 @@ riot.compile(function() {
   }
 
   function mount(tag, opts) {
-    mountNavbar({ tabs: "templates,profiles,reports" })
+    mountNavbar({ tabs: "designs,profiles,reports" })
     currentTag && currentTag.unmount(true)
     currentTag = riot.mount('#main', tag, opts)[0]
   }
@@ -32,13 +40,14 @@ riot.compile(function() {
   }
 
   var routes = {
-    templates: resourceHandler,
+    forms: resourceHandler,
     profiles: resourceHandler,
     reports: resourceHandler
   };
 
   function handler(collection, id, action) {
-    collection = collection || 'templates';
+    if(collection === 'designs') { collection = 'forms' }
+    collection = collection || 'reports';
     var fn = routes[collection]
     fn ? fn(collection, id, action) : console.error("No route found: ", collection, id, action)
   }

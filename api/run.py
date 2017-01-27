@@ -6,6 +6,10 @@ from bson.objectid import ObjectId
 from docxtpl import DocxTemplate
 from io import BytesIO, StringIO
 
+MONGO_HOST = getenv("MONGO_HOST","mongo")
+MONGO_PORT = int(getenv("MONGO_PORT", "27017"))
+MONGO_DBNAME = getenv("MONGO_DBNAME","reporter-db")
+
 def get_template_file(template):
   fs = GridFS(app.data.driver.db)
   return fs.get(template["file"])
@@ -29,7 +33,7 @@ def send_gridfs_file(record):
   else:
     return resp, 404
 
-template_schema = {
+form_schema = {
   'name': {
     'type': 'string',
     'required': True,
@@ -38,18 +42,19 @@ template_schema = {
   'description': {
     'type': 'string'
   },
-  'profile': {
-    'type': 'objectid',
-    'data_relation': {
-      'resource': 'profiles',
-      'field': '_id',
-      'embeddable': True
-    }
+  'grouping': {
+    'type': 'string',
+    'default': ''
+  },
+  'field_definitions': {
+    'type': 'list',
+    'default': {}
   },
   'file': {
     'type': 'media'
   }
 }
+
 profile_schema = {
   'name': {
     'type': 'string',
@@ -64,6 +69,7 @@ profile_schema = {
     'default': {}
   }
 }
+
 report_schema = {
   'title': {
     'type': 'string',
@@ -73,39 +79,10 @@ report_schema = {
   'description': {
     'type': 'string'
   },
-  'fields': {
-    'type': 'dict',
-    'default': {}
-  },
-  'base_profile': {
-    'type': 'objectid',
-    'data_relation': {
-      'resource': 'profiles',
-      'field': '_id',
-      'embeddable': True
-    }
-  },
-  'profile': {
-    'type': 'objectid',
-    'data_relation': {
-      'resource': 'profiles',
-      'field': '_id',
-      'embeddable': True
-    }
-  },
-  'template': {
-    'type': 'objectid',
-    'data_relation': {
-      'resource': 'templates',
-      'field': '_id',
-      'embeddable': True
-    }
+  'report': {
+    'type': 'media'
   }
 }
-
-MONGO_HOST = getenv("MONGO_HOST","mongo")
-MONGO_PORT = int(getenv("MONGO_PORT", "27017"))
-MONGO_DBNAME = getenv("MONGO_DBNAME","reporter-db")
 
 settings = {
   'URL_PREFIX': 'api',
@@ -121,22 +98,13 @@ settings = {
   'MEDIA_ENDPOINT': 'raw',
   'DATE_FORMAT': '%Y-%m-%d %H:%M:%S',
   'DOMAIN': {
-    'templates': {
-      'embedded_fields': ['profile'],
-      'schema': template_schema
+    'forms': {
+      'schema': form_schema
     },
     'profiles': {
       'schema': profile_schema
     },
-    'profile-fields': {
-      'schema': profile_schema,
-      'datasource': {
-        'source': 'profiles',
-        'projection': { 'fields': 1 }
-      }
-    },
     'reports': {
-      'embedded_fields': ['template','profile','base_profile'],
       'schema': report_schema
     }
   }
