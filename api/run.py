@@ -10,6 +10,48 @@ MONGO_HOST = getenv("MONGO_HOST","mongo")
 MONGO_PORT = int(getenv("MONGO_PORT", "27017"))
 MONGO_DBNAME = getenv("MONGO_DBNAME","reporter-db")
 
+DEFAULT_FORM = {
+  "name": "Default Form",
+  "children": [
+    {
+      "name": "Main Body",
+      "children": [
+        {
+          "columns": 2,
+          "name": "Left Column",
+          "children": []
+        },
+        {
+          "columns": 2,
+          "name": "Right Column",
+          "children": []
+        }
+      ]
+    },
+    {
+      "name": "Footer",
+      "children": []
+    }
+  ],
+  "components": [
+    {
+      "layout": "Main Body",
+      "label": "<label class='control-label'>Title</label>",
+      "input": "<input class='form-control' name='title' placeholder='enter title...'>"
+    },
+    {
+      "layout": "Left Column",
+      "label": "<label class='control-label'>Name</label>",
+      "input": "<input class='form-control' name='name' placeholder='enter name...'>"
+    },
+    {
+      "layout": "Right Column",
+      "label": "<label class='control-label'>Description</label>",
+      "input": "<textarea rows='4' class='form-control' name='description' placeholder='explain that...'></textarea>"
+    }
+  ]
+}
+
 def get_template_file(template):
   fs = GridFS(app.data.driver.db)
   return fs.get(template["file"])
@@ -46,9 +88,9 @@ form_schema = {
     'type': 'string',
     'default': ''
   },
-  'field_definitions': {
-    'type': 'list',
-    'default': {}
+  'form': {
+    'type': 'dict',
+    'default': DEFAULT_FORM
   },
   'file': {
     'type': 'media'

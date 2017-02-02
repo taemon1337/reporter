@@ -27,7 +27,10 @@
         </div>
         <div class="panel-body">
           <div class="col-xs-12">
-            <form-builder></form-builder>
+            <div class="pull-right">
+              <button onclick={ save } class="btn btn-primary">Save</button>
+            </div>
+            <form-designer form={ form.form }></form-designer>
           </div>
         </div>
       </div>
@@ -37,11 +40,11 @@
   <script>
     var self = this
     self.form = opts.form
-    self.editor = opts.editor
 
-    self.on('form-element:edit', function(config) {
-      self.update({ editor: config })
-    })
-
+    self.save = function() {
+      riot.app.save("forms", self.form, null, function(record) {
+        self.update({ form: record })
+      })
+    }
   </script>
 </forms-show>

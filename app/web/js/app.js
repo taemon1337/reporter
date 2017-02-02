@@ -21,6 +21,8 @@
             } else {
               data[key] = record[key]
             }
+          } else if(collection === "forms" && key === "file") {
+            // skip
           } else {
             data[key] = record[key]
           }
