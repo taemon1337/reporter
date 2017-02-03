@@ -22,8 +22,8 @@
           <select-option default="--select profile--" current={ parent.report.profile._id } fetch={ parent.fetch_profiles } option_text="name" field="profile"></select-option>
         </form-group>
 
-        <form-group label="Select Template">
-          <select-option default="--select template--" current={ parent.report.template._id } fetch={ parent.fetch_templates } option_text="name" field="template"></select-option>
+        <form-group label="Select Form">
+          <select-option default="--select form--" current={ parent.report.form._id } fetch={ parent.fetch_forms } option_text="name" field="form"></select-option>
         </form-group>
 
         <form-group>
@@ -36,7 +36,7 @@
 
   <script>
     var self = this
-    this.report = opts.report
+    this.report = opts.report || {}
 
     this.save = function(e) {
       e.preventDefault()
@@ -54,12 +54,11 @@
       riot.app.fetch("profiles", null, null, cb)
     }
 
-    this.fetch_templates = function(cb) {
-      riot.app.fetch("templates", null, null, cb)
+    this.fetch_forms = function(cb) {
+      riot.app.fetch("forms", null, null, cb)
     }
 
     this.on('option:selected', function(data) {
-      console.log("option selected", data)
       self.report[data.field] = data.value
     })
 

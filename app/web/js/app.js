@@ -15,7 +15,7 @@
       Object.keys(record)
         .filter(function(k) { return !k.startsWith("_") })
         .forEach(function(key) {
-          if(['base_profile','profile','template'].indexOf(key) >= 0) {
+          if(['base_profile','profile','form'].indexOf(key) >= 0) {
             if(typeof(record[key]) !== 'string') {
               data[key] = record[key]._id
             } else {
@@ -70,7 +70,13 @@
       .catch(cb);
     },
     fetch: function(collection, id, action, cb) {
-      if(id === 'new') { return cb({}) }
+      if(id === 'new') {
+        if(collection === "reports") {
+          return cb({ base_profile: {}, profile: {}, form: {} })
+        } else {
+          return cb({})
+        }
+      }
       var self = this;
       var url = [self.base,collection,id].join('/').replace('//','/');
       $.get(url).then(function(resp) {
@@ -97,18 +103,18 @@
         var records = [];
         for(var i=0; i<resp._items.length; i++) {
           var rec = resp._items[i]
-          if(collection === 'templates') {
+          if(collection === 'forms') {
             rec.profile = rec.profile || {};
           }
           if(collection === 'reports') {
-            ["base_profile","profile","template"].forEach(function(key) { rec[key] = rec[key] || {} })
+            ["base_profile","profile","form"].forEach(function(key) { rec[key] = rec[key] || {} })
           }
           records.push(rec);
         }
         return records;
       } else {
         if(collection === 'reports') {
-          ["base_profile","profile","template"].forEach(function(key) {
+          ["base_profile","profile","form"].forEach(function(key) {
             resp[key] = resp[key] || {};
           })
         }

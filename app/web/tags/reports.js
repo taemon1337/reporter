@@ -21,7 +21,7 @@
     this.headers = opts.headers || {
       title: { template: "<a href='./#/reports/{ _id }'>{ title }</a>" },
       description: {},
-      template: { template: "<a href='./#/templates/{ template._id }'>{ template.name }</a>" },
+      form: { template: "<a href='./#/forms/{ form._id }'>{ form.name }</a>" },
       profile: { template: "<a href='./#/profiles/{ profile ? profile._id : '' }'>{ profile ? profile.name : '' }</a>" },
       base_profile: { text: "BASE PROFILE", template: "<a href='./#/profiles/{ base_profile ? base_profile._id : '' }'>{ base_profile ? base_profile.name : '' }</a>" }
     }

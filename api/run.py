@@ -52,9 +52,9 @@ DEFAULT_FORM = {
   ]
 }
 
-def get_template_file(template):
+def get_form_file(form):
   fs = GridFS(app.data.driver.db)
-  return fs.get(template["file"])
+  return fs.get(form["file"])
 
 def stream_document(doc, filename="download.docx", mimetype="application/octect-stream"):
   buff = BytesIO()
@@ -123,6 +123,34 @@ report_schema = {
   },
   'report': {
     'type': 'media'
+  },
+  'fields': {
+    'type': 'dict',
+    'default': {}
+  },
+  'base_profile': {
+    'type': 'objectid',
+    'data_relation': {
+      'resource': 'profiles',
+      'field': '_id',
+      'embeddable': True
+    }
+  },
+  'profile': {
+    'type': 'objectid',
+    'data_relation': {
+      'resource': 'profiles',
+      'field': '_id',
+      'embeddable': True
+    }
+  },
+  'form': {
+    'type': 'objectid',
+    'data_relation': {
+      'resource': 'forms',
+      'field': '_id',
+      'embeddable': True
+    }
   }
 }
 
@@ -147,6 +175,7 @@ settings = {
       'schema': profile_schema
     },
     'reports': {
+      'embedded_fields': ['base_profile','profile','form'],
       'schema': report_schema
     }
   }
@@ -157,18 +186,18 @@ app = Eve(settings=settings)
 @app.route('/api/reports/<report_id>/download', methods=["GET"])
 def download_report(report_id):
   reports = app.data.driver.db['reports']
-  templates = app.data.driver.db['templates']
+  forms = app.data.driver.db['forms']
   profiles = app.data.driver.db['profiles']
 
   report = reports.find_one({ "_id": ObjectId(report_id) })
   if report:
-    template = templates.find_one({ "_id": report['template'] })
-    if template:
+    form = forms.find_one({ "_id": report['form'] })
+    if form:
       base = profiles.find_one({ "_id": report['base_profile'] })
       if base:
         profile = profiles.find_one({ "_id": report['profile'] })
         if profile:
-          tmpl = get_template_file(template)
+          tmpl = get_form_file(form)
           if tmpl:
             doc = DocxTemplate(tmpl)
             options = base.copy()
@@ -178,13 +207,13 @@ def download_report(report_id):
             doc.render(options)
             return stream_document(doc, filename="{0}.docx".format(report["title"]))
           else:
-            raise Exception("Could not read template: {0}".format(repr(template)))
+            raise Exception("Could not read form: {0}".format(repr(form)))
         else:
           raise Exception("Could not find profile: {0}".format(report['profile']))
       else:
         raise Exception("Could not find base profile: {0}".format(report['base_profile']))
     else:
-      raise Exception("Could not find template: {0}".format(report['template']))
+      raise Exception("Could not find form: {0}".format(report['form']))
   else:
     raise Exception("Could not find report: {0}".format(report_id))
 
