@@ -14,7 +14,7 @@
     <div class="col-xs-12">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <div class="pull-right">
+          <div if={ form.file } class="pull-right">
             <i>{ form.file.name }</i>
             <i>({ humanFileSize(form.file.length) })</i>
             <a href=".{ form.file.file }" download={ form.file.name } title="Download">
@@ -42,8 +42,9 @@
     self.form = opts.form
 
     self.save = function() {
-      riot.app.save("forms", self.form, null, function(record) {
-        self.update({ form: record })
+      riot.app.save("forms", self.form, null, function(resp) {
+        for(var key in resp) { self.form[key] = resp[key] }
+        self.update({ form: self.form })
       })
     }
   </script>

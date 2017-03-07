@@ -15,7 +15,7 @@
       Object.keys(record)
         .filter(function(k) { return !k.startsWith("_") })
         .forEach(function(key) {
-          if(['base_profile','profile','form'].indexOf(key) >= 0) {
+          if(collection === "reports" && ['base_profile','profile','form'].indexOf(key) >= 0) {
             if(typeof(record[key]) !== 'string') {
               data[key] = record[key]._id
             } else {
@@ -27,6 +27,8 @@
             data[key] = record[key]
           }
         });
+
+      console.log("DATA: ", data)
 
       var options = $.extend({}, {
         url: [self.base,collection,record._id].join('/').replace('//','/'),
