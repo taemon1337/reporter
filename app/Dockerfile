@@ -1,6 +1,6 @@
-FROM node
+FROM node:alpine
 
-RUN npm install express request
+RUN npm install express http-proxy winston
 
 COPY ./ /work
 WORKDIR /work

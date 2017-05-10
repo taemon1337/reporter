@@ -28,8 +28,6 @@
           }
         });
 
-      console.log("DATA: ", data)
-
       var options = $.extend({}, {
         url: [self.base,collection,record._id].join('/').replace('//','/'),
         method: record._id ? "PATCH" : "POST",

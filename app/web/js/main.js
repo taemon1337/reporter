@@ -1,6 +1,7 @@
 riot.compile(function() {
   var currentTag = null;
   var currentNav = null;
+  var base = "https://api.swarm:8443/reporter-api";
   var app = riot.app = new App();
   var tabs = [
     { text: "Inbox", href: "/inbox/", url: true },

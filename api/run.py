@@ -203,7 +203,6 @@ def download_report(report_id):
             options = base.copy()
             options.update(profile)
             options.update(report["fields"])
-            app.logger.info("RENDER OPTS: ", repr(options))
             doc.render(options)
             return stream_document(doc, filename="{0}.docx".format(report["title"]))
           else:
