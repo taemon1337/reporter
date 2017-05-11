@@ -1,6 +1,6 @@
 FROM node:alpine
 
-RUN npm install express http-proxy winston
+RUN npm install surveyjs-editor
 
 COPY ./ /work
 WORKDIR /work

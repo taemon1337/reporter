@@ -1,0 +1,196 @@
+<html>
+  <head>
+    <style>
+        .table, .table th, .table td {
+            border-collapse: collapse;
+            border: 1px solid black;
+        }
+        .subtable, .subtable th, .subtable td {
+            border: none;
+            text-align: left;
+        }
+        th, td {
+            padding: 5px;
+            font-size:12px;
+        }
+        .section {
+            background: #DEDEDE;
+            text-align: center;
+        }
+        ul {
+            list-style-type:none;
+            padding-left:0px;
+        }
+    </style>
+      
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+  </head>
+  <body>
+    <table class='table' width='100%'>
+        <thead>
+            <tr>
+                <th width='16.5%'></th>
+                <th width='16.5%'></th>
+                <th width='16.5%'></th>
+                <th width='16.5%'></th>
+                <th width='16.5%'></th>
+                <th width='16.5%'></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th>
+                    <img src='{#image tigta-logo}'/>
+                </th>
+                <th colspan='5'>
+                    <div style='margin:0px;padding:0px;'>
+                        <span style="font-family:Castellar;font-size:10px;">
+                            Treasury Inspector General For Tax Administration<br>
+                            FORENSIC & DIGITAL SCIENCE LABORATORY<br><br>
+                        </span>
+                        <span style='font-family:Cambria;font-size:14px;'>
+                            EXTRACTION SUMMARY REPORT<br>
+                        </span>
+                        <span style='font-family:Cambria;font-size:10px;'>
+                            12119 Indian Creek Court, Beltsville, Maryland 20705
+                        </span>
+                    </div>
+                </th>
+            </tr>
+            <tr class='section'>
+                <td colspan='6'>
+                    <p>CASE INFORMATION</p>
+                </td>
+            </tr>
+            <tr>
+                <td colspan='3'>
+                    <table class='subtable'>
+                        <tbody>
+                            <tr>
+                                <th>Case Title:</th>
+                                <td>{{ case.title }}</td>
+                            </tr>
+                            <tr>
+                                <th>DFS Agent:</th>
+                                <td>{{ examiner.name }}</td>
+                            </tr>
+                            <tr>
+                                <th>DFS POD:</th>
+                                <td>{{ examiner.pod }}</td>
+                            </tr>
+                            <tr>
+                                <th>Telephone Number:</th>
+                                <td>{{ examiner.phone }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+                <td colspan='3'>
+                    <table class='subtable'>
+                        <tbody>
+                            <tr>
+                                <th>Case Number:</th>
+                                <td>{{ case.number }}</td>
+                            </tr>
+                            <tr>
+                                <th>Case Agent:</th>
+                                <td>{{ agent.name }}</td>
+                            </tr>
+                            <tr>
+                                <th>POD:</th>
+                                <td>{{ agent.pod }}</td>
+                            </tr>
+                            <tr>
+                                <th>Telephone Number:</th>
+                                <td>{{ agent.phone }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <tr class='section'>
+                <td colspan='6'>
+                    <p>EXTRACTION INFORMATION</p>
+                </td>
+            </tr>
+            <tr>
+                <td colspan='3'>
+                    <table class='subtable'>
+                        <tbody>
+                            <tr>
+                                <th>Examination Concluded:</th>
+                                <td>{{ exam.stop_at }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+                <td colspan='3'>
+                    <table class='subtable'>
+                        <tbody>
+                            <tr>
+                                <th>Extraction Number:</th>
+                                <td>{{ exam.number }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td colspan='6'>
+                    <h3>Item(s) Submitted:</h3>
+                    <p>
+                        {{#each exam.items }}
+                            {{#if label}}
+                                <b>{{ label }}:</b><br>
+                            {{/if}}
+                            {{ content }}<br><br>
+                        {{/each }}
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td colspan='6'>
+                    <h3>Description of Items Extracted and Attached:</h3>
+                    <p>
+                        {{#each exam.summaries }}
+                            {{#if label}}
+                                <b>{{ label }}:</b><br>
+                            {{/if}}
+                            {{ content }}<br><br>
+                        {{/each }}
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td colspan='6'>
+                    <h3>Disposition of Evidence:</h3>
+                    <p>
+                        {{#each exam.dispositions }}
+                            {{#if label}}
+                                <b>{{ label }}:</b><br>
+                            {{/if}}
+                            {{ content }}<br><br>
+                        {{/each }}
+                    </p>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <div style='padding:10px;'>
+        <div style='width:50%;height:50px;border: 1px solid black;'>
+        </div>
+        <h4 style='margin-left:15%;margin-top:0px;'>
+            DFS Examiner
+        </h4>
+    </div>
+    
+    <div class='width:100%;margin:5px;font-color:#DEDEDE;'>
+        <h6 style='text-align:center;'>
+            OFFICIAL USE ONLY<br>
+            THIS DOCUMENT IS PROVIDED FOR OFFICIAL USE ONLY.  ANY REQUEST FOR DISCLOSURE OR FURTHER DISSEMINATION OF THIS DOCUMENT OR INFORMATION CONTAINED HEREIN SHOULD BE REFERRED TO HEADQUARTERS, TREASURY INSPECTOR GENERAL FOR TAX ADMINISTRATION.
+            THIS REPORT CONTAINS THE CONCLUSIONS, OPINIONS, AND INTERPRETATIONS OF THE EXAMINER WHOSE SIGNATURE APPEARS ON THE REPORT.
+        </h6>
+    </div>
+  </body>
+</html>

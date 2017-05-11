@@ -1,0 +1,47 @@
+{
+    "case": {
+        "title": "TITLE, CASE",
+        "number": "75-0034-0005-I"
+    },
+    "examiner": {
+        "name": "STELLO, TIMOTHY",
+        "pod": "Beltsville, MD",
+        "phone": "301-210-8711"
+    },
+    "agent": {
+        "name": "AGENT, CASE",
+        "pod": "Lanham, MD",
+        "phone": "213-640-xxxx"
+    },
+    "exam": {
+        "number": "ES-1600-001",
+        "items": [
+            {
+                "label": "Evidence Item 001",
+                "content": "Evidence Item 001 was received at some point and we did some stuff to it."
+            },
+            {
+                "label": "Evidence Item 002",
+                "content": "We burned this one as you wouldn't want it."
+            }
+        ],
+        "summaries": [
+            {
+                "content": "The summary of the investigation is that we did some stuff and are returning stuff to the other person to do some more stuff."
+            },
+            {
+                "content": "And another thing..."
+            },
+            {
+                "label": "Disclaimer",
+                "content": "We are not responsible to do stuff, and the stuff we do do, we are not responsible for either."
+            }
+        ],
+        "dispositions": [
+            {
+                "content": "Here at DFS, we are disposed to doing things.  We have disposed of your evidence in a timely manner with all the care that you yourself would have used."
+            }
+        ],
+        "attachments": []
+    }
+}

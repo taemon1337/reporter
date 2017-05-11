@@ -1,0 +1,39 @@
+<template>
+  <div>
+    <survey-editor></survey-editor>
+  </div>
+</template>
+
+<script>
+import SurveyEditor from '@/components/SurveyEditor'
+import * as SurveyVue from 'survey-vue'
+var Survey = SurveyVue.Survey
+Survey.cssType = 'bootstrap'
+
+export default {
+  name: 'EditorPage',
+  data () {
+    var json = {
+      title: 'DFS Form Templates',
+      showProgressBar: 'top',
+      pages: [
+        {
+          questions: []
+        }
+      ]
+    }
+    var model = new SurveyVue.Model(json)
+    return {
+      survey: model
+    }
+  },
+  components: {
+    Survey,
+    SurveyEditor
+  }
+}
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped>
+</style>
