@@ -9,6 +9,18 @@ import store from './store'
 Vue.config.productionTip = false
 Vue.use(VueMaterial)
 
+Vue.material.registerTheme({
+  default: {
+    primary: 'deep-purple',
+    accent: 'light-blue'
+  },
+  sub: {
+    background: 'green',
+    primary: 'white',
+    accent: 'lime'
+  }
+})
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

@@ -31,10 +31,9 @@ survey_schema = {
   'description': {
     'type': 'string'
   },
-  'pages': {
-    'type': 'list',
-    'required': True,
-    'default': []
+  'pages_json': {
+    'type': 'string',
+    'default': '{}'
   }
 }
 

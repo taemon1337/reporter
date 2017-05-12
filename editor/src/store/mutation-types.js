@@ -4,11 +4,14 @@ export const GlobalTypes = {
 }
 
 export const ReportTypes = {
-  create: 'Report.create',
-  findAll: 'Report.findAll'
+  save: 'Report.save',
+  findAll: 'Report.findAll',
+  find: 'Report.find'
 }
 
 export const SurveyTypes = {
-  create: 'Survey.create',
-  findAll: 'Survey.findAll'
+  save: 'Survey.save',
+  findAll: 'Survey.findAll',
+  find: 'Survey.find',
+  current: 'Survey.current'
 }

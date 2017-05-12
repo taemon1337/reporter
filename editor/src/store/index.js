@@ -5,6 +5,7 @@ import * as getters from './getters'
 import ui from './modules/ui'
 import currentUser from './modules/current_user'
 import surveys from './modules/surveys'
+import reports from './modules/reports'
 
 Vue.use(Vuex)
 
@@ -16,7 +17,8 @@ export default new Vuex.Store({
   modules: {
     ui,
     currentUser,
-    surveys
+    surveys,
+    reports
   },
   strict: debug
 })

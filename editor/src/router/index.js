@@ -15,18 +15,23 @@ export default new Router({
       component: HomePage
     },
     {
-      path: '/surveys',
-      name: 'SurveysPage',
+      path: '/templates',
+      name: 'templates',
       component: SurveyPage
     },
     {
       path: '/reports',
-      name: 'ReportPage',
+      name: 'reports',
       component: ReportPage
     },
     {
-      path: '/editor',
-      name: 'EditorPage',
+      path: '/templates/:id',
+      name: 'template',
+      component: EditorPage
+    },
+    {
+      path: '/reports/:id',
+      name: 'report',
       component: EditorPage
     }
   ]

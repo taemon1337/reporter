@@ -8,18 +8,6 @@
         <md-tooltip>Go Home</md-tooltip>
         <md-icon>home</md-icon>
       </md-button>
-      <md-button class='md-icon-button' @click.native='$router.push("/surveys")'>
-        <md-tooltip>View Templates</md-tooltip>
-        <md-icon>library_books</md-icon>
-      </md-button>
-      <md-button class='md-icon-button' @click.native='$router.push("/reports")'>
-        <md-tooltip>Create Reports</md-tooltip>
-        <md-icon>note_add</md-icon>
-      </md-button>
-      <md-button class='md-icon-button' @click.native="$router.push('/editor')">
-        <md-tooltip>Create New Template</md-tooltip>
-        <md-icon>library_add</md-icon>
-      </md-button>
   
       <h2 class="md-title" style="flex: 1;">
         <md-button @click.native="$router.push('/')">Digital Forensic Services</md-button>

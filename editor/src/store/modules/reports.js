@@ -25,9 +25,9 @@ const actions = {
       console.warn('Error creating report', err)
     })
   },
-  [ReportTypes.findAll] ({ commit }) {
-    Api.reports.findAll().then(function (resp) {
-      commit(ReportTypes.findAll, { reports: resp.data })
+  [ReportTypes.findAll] ({ commit }, opts) {
+    Api.reports.findAll(opts).then(function (resp) {
+      commit(ReportTypes.findAll, { reports: resp.data._items })
     })
   }
 }
