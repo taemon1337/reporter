@@ -25,8 +25,7 @@ survey_schema = {
   },
   'version': {
     'type': 'string',
-    'required': True,
-    'unique': True
+    'required': True
   },
   'description': {
     'type': 'string'

@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import HomePage from '@/pages/HomePage'
 import SurveyPage from '@/pages/SurveyPage'
+import TemplatePage from '@/pages/TemplatePage'
 import ReportPage from '@/pages/ReportPage'
 import EditorPage from '@/pages/EditorPage'
 
@@ -15,19 +16,28 @@ export default new Router({
       component: HomePage
     },
     {
+      path: '/surveys',
+      name: 'surveys',
+      component: SurveyPage
+    },
+    {
+      path: '/surveys/:id',
+      name: 'survey',
+      props: true,
+      component: EditorPage
+    },
+    {
       path: '/templates',
       name: 'templates',
-      component: SurveyPage
+      component: TemplatePage
+      // redirect: function () {
+      //   window.location = '/templates'
+      // }
     },
     {
       path: '/reports',
       name: 'reports',
       component: ReportPage
-    },
-    {
-      path: '/templates/:id',
-      name: 'template',
-      component: EditorPage
     },
     {
       path: '/reports/:id',

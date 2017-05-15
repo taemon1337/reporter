@@ -3,15 +3,24 @@ export const GlobalTypes = {
   GET_CURRENT_USER: 'GET_CURRENT_USER'
 }
 
-export const ReportTypes = {
-  save: 'Report.save',
-  findAll: 'Report.findAll',
-  find: 'Report.find'
-}
-
 export const SurveyTypes = {
   save: 'Survey.save',
   findAll: 'Survey.findAll',
   find: 'Survey.find',
-  current: 'Survey.current'
+  active: 'Survey.active',
+  remove: 'Survey.remove'
+}
+
+export const TemplateTypes = {
+  save: 'Template.save',
+  findAll: 'Template.findAll',
+  find: 'Template.find',
+  active: 'Template.active',
+  remove: 'Template.remove'
+}
+
+export const ReportTypes = {
+  save: 'Report.save',
+  findAll: 'Report.findAll',
+  find: 'Report.find'
 }

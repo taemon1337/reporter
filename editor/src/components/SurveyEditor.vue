@@ -14,28 +14,28 @@
 
     <md-dialog ref='propertiesDialog'>
       <md-dialog-title>
-        Edit Template Properties
+        Edit Survey Properties
       </md-dialog-title>
       <md-dialog-content>
         <form @submit.stop.prevent='saveProperties' novalidate>
-          <md-input-container>
+          <md-input-container v-if="survey._id">
             <label>Id</label>
-            <md-input :value='template._id' disabled></md-input>
+            <md-input :value="survey._id" readonly></md-input>
           </md-input-container>
           
           <md-input-container>
-            <label>Title</label>
-            <md-input v-model='form.title' :placeholder='template.title'></md-input>
+            <label>{{ survey.title || 'Title' }}</label>
+            <md-input v-model='form.title'></md-input>
           </md-input-container>
 
           <md-input-container>
-            <label>Version</label>
-            <md-input v-model='form.version' :placeholder='template.version'></md-input>
+            <label>{{ survey.version || 'Version' }}</label>
+            <md-input v-model='form.version'></md-input>
           </md-input-container>          
 
           <md-input-container>
-            <label>Description</label>
-            <md-textarea v-model='form.description' :placeholder='template.description'></md-textarea>
+            <label>{{ survey.description.substring(0,20) || 'Description' }}</label>
+            <md-textarea v-model='form.description'></md-textarea>
           </md-input-container>
           
           <md-button type='submit' ref='savePropertiesButton' hidden>Save Properties</md-button>
@@ -44,28 +44,24 @@
       
       <md-dialog-actions>
         <md-button class='md-raised' @click.native='closePropertiesDialog'>Cancel</md-button>
-        <md-button class='md-raised md-primary' @click.native='$refs.savePropertiesButton.$el.click()'>Save Template</md-button>
+        <md-button class='md-raised md-primary' @click.native='$refs.savePropertiesButton.$el.click()'>Save Survey</md-button>
       </md-dialog-actions>
     </md-dialog>
     
-    <md-toolbar md-theme='sub'>
+    <md-toolbar md-theme='sub' class='md-transparent'>
       <h2 class="md-title">
-        <md-input-container @click.native='openPropertiesDialog' style='width:150px;'>
-          <label>Template Title</label>
-          <md-tooltip>Edit Template Properties</md-tooltip>
-          <md-input :value="template.title"></md-input>
-        </md-input-container>
+        <md-button @click.native='openPropertiesDialog'>{{ survey.title || 'Set Properties' }}</md-button>
       </h2>
       
-      <md-button class='md-raised md-success' @click.native='editor.saveButtonClick()' :disabled='!template._id'>Save Template</md-button>
+      <md-button class='md-raised md-primary' @click.native='editor.saveButtonClick()' :disabled='!survey._id'>Save Survey</md-button>
       
-      <h3 style='margin-left:150px;flex: 1'>Template Designer</h3>
+      <h3 style='margin-left:150px;flex: 1'>Survey Designer</h3>
       
       <md-button class='md-raised md-accent' @click.native='editor.showDesigner()'>Design</md-button>
       <md-button class='md-raised md-accent' @click.native='editor.showJsonEditor()'>Edit JSON</md-button>
       <md-button class='md-raised md-accent' @click.native='editor.showTestSurvey()'>Preview</md-button>
       
-      <md-button class='md-raised md-icon-button' @click.native="editor.doUndoClick">
+      <md-button class='md-raised md-icon-button' @click.native="editor.doUndoClick" :disabled="undoable">
         <md-tooltip>Undo</md-tooltip>
         <md-icon>undo</md-icon>
       </md-button>
@@ -73,8 +69,19 @@
         <md-tooltip>Redo</md-tooltip>
         <md-icon>redo</md-icon>
       </md-button>
+      <md-menu md-size="1" md-direction='bottom left' md-align-trigger>
+        <md-button class='md-icon-button' md-menu-trigger>
+          <md-icon>settings</md-icon>
+        </md-button>
+        <md-menu-content style='width:200px;'>
+          <md-menu-item @selected='removeSurvey'>
+            <span>Delete Survey</span>
+            <md-icon>delete</md-icon>
+          </md-menu-item>
+        </md-menu-content>
+      </md-menu>
     </md-toolbar>
-    <div :id="container"></div>
+    <div id='editor-container'></div>
   </div>
 </template>
 
@@ -94,7 +101,6 @@
       return {
         form: {},
         message: {},
-        container: 'editor-container',
         options: {
           showTestSurveyTab: false
         }
@@ -102,20 +108,23 @@
     },
     computed: {
       ...mapGetters({
-        template: SurveyTypes.current
-      })
+        survey: SurveyTypes.active
+      }),
+      undoable () {
+        return this.editor && this.editor.toolbarItems()[0].enabled()
+      }
     },
     methods: {
       saveProperties (e) {
-        this.$store.dispatch(SurveyTypes.save, Object.assign({}, this.template, this.form))
-        this.form = {}
+        this.$store.dispatch(SurveyTypes.save, Object.assign({}, this.survey, this.form))
+        this.form = Object.assign({})
         this.closePropertiesDialog()
       },
-      saveTemplate (data) {
-        if (this.template._id) {
-          this.$store.dispatch(SurveyTypes.save, { _id: this.template._id, _etag: this.template._etag, pages_json: data })
+      saveSurvey (data) {
+        if (this.survey._id) {
+          this.$store.dispatch(SurveyTypes.save, { _id: this.survey._id, _etag: this.survey._etag, pages_json: data })
         } else {
-          this.message = { title: 'Oops!', content: 'You must save the template properties first' }
+          this.message = { title: 'Oops!', content: 'You must save the survey properties first' }
           this.$refs.messageDialog.open()
         }
       },
@@ -129,20 +138,25 @@
       closePropertiesDialog () {
         this.$refs.propertiesDialog.close()
       },
+      removeSurvey () {
+        this.$store.dispatch(SurveyTypes.remove, Object.assign({}, this.survey))
+      },
       mountEditor () {
         let self = this
-        self.editor = new SurveyEditor.SurveyEditor(self.container, self.options)
+        self.editor = new SurveyEditor.SurveyEditor('editor-container', self.options)
   
-        window.editor = self.editor
+        if (self.editor.renderedElement) {
+          window.editor = self.editor
   
-        // remove default toolbox as it renders weird with material-design-bootstrap
-        self.editor.renderedElement.firstChild.children[0].remove()
-  
-        self.editor.saveSurveyFunc = function () {
-          self.saveTemplate(this.text)
+          // remove default toolbox as it renders weird with material-design-bootstrap
+          self.editor.renderedElement.firstChild.children[0].remove()
+
+          self.editor.saveSurveyFunc = function () {
+            self.saveSurvey(this.text)
+          }
         }
 
-        self.editor.text = self.template.pages_json
+        self.editor.text = self.survey.pages_json
       },
       failMessage (title, content) {
         this.message = { title: title || 'Oops!', content: content || 'Something went wrong' }
@@ -154,8 +168,8 @@
     },
     mounted () {
       let id = this.$route.params.id
-      if (id && id !== 'new') {
-        this.$store.dispatch(SurveyTypes.find, { _id: id })
+      if (id) {
+        this.$store.dispatch(SurveyTypes.find, id)
       } else {
         this.failMessage('Oops!', 'No Id parameter provided!')
       }

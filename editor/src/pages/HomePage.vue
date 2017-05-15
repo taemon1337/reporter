@@ -1,20 +1,22 @@
 <template>
   <div class='container-fluid' style='padding:25px;'>
     <div class='row'>
-      <md-card class='col-xs-4 col-xs-offset-1' v-for="(card, index) in cards" key="index" style='padding:15px;'>
+      <md-card class='col-xs-3 col-xs-offset-1' v-for="(card, index) in cards" key="index" style='padding:15px;'>
         <md-card-header>
           <div class='md-title'>{{ card.title }}</div>
           <div class='md-subhead'>{{ card.subtitle }}</div>
         </md-card-header>
         
-        <md-card-media v-if="card.image">
+        <md-card-media v-if="card.image" @click.native="$router.push(card.actions[0].route)" style='cursor:pointer;'>
           <img :src="card.image" style='height:250px;'>
         </md-card-media>
         
         <md-card-actions>
-          <md-button class='md-raised md-primary' v-for="(action, idx) in card.actions" key="idx" @click.native="$router.push(action.route)">
+          <div v-for="(action, idx) in card.actions" key="idx">
+            <md-button class='md-raised md-primary'  @click.native="$router.push(action.route)">
             {{ action.text }}
           </md-button>
+          </div>
         </md-card-actions>
       </md-card>
     </div>
@@ -41,19 +43,30 @@ export default {
       hiddenFields: ['description'],
       cards: [
         {
-          title: 'Create a new template',
-          subtitle: 'Define a template to use to generate reports',
-          image: require('../assets/new-template-photo.png'),
+          title: 'Create a new survey',
+          subtitle: 'Create a survey form to collect report fields',
+          image: require('../assets/new-survey-photo.png'),
           actions: [
             {
               text: 'Open Editor',
-              route: '/templates/new'
+              route: '/surveys/new'
             }
           ]
         },
         {
-          title: 'Fill out a template',
-          subtitle: 'Complete a template to create a new report',
+          title: 'Create a Template',
+          subtitle: 'Design a template to generate PDF reports',
+          image: require('../assets/new-template-photo.png'),
+          actions: [
+            {
+              text: 'Create Template',
+              route: '/templates'
+            }
+          ]
+        },
+        {
+          title: 'Create a report',
+          subtitle: 'Fill out and save a survey to create report data',
           image: require('../assets/new-report-photo.jpg'),
           actions: [
             {

@@ -5,6 +5,7 @@ services:
   jsreport:
     image: jsreport/jsreport:latest
     environment:
+      - appPath=/templates
       - authentication:enabled=true
       - authentication:admin:password=admin
     volumes:

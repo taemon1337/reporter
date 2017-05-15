@@ -15,9 +15,10 @@ Vue.material.registerTheme({
     accent: 'light-blue'
   },
   sub: {
-    background: 'green',
-    primary: 'white',
-    accent: 'lime'
+    background: 'white',
+    primary: 'deep-purple',
+    accent: 'lime',
+    warn: 'red'
   }
 })
 

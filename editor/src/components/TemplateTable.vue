@@ -2,7 +2,7 @@
   <md-table-card>
     <md-toolbar>
       <h1 class="md-title">
-        <router-link to="surveys">Surveys</router-link>
+        <router-link to="templates">Templates</router-link>
       </h1>
       <md-button class="md-icon-button">
         <md-icon>filter_list</md-icon>
@@ -25,8 +25,8 @@
             {{ record[header.field] }}
           </md-table-cell>
           <md-table-cell>
-            <router-link :to="{ name: 'survey', params: { id: record._id }}">
-              <md-tooltip>Edit Survey</md-tooltip>
+            <router-link :to="{ name: 'template', params: { id: record._id }}">
+              <md-tooltip>Edit Template</md-tooltip>
               <md-icon>edit</md-icon>
             </router-link>
           </md-table-cell>
@@ -37,12 +37,12 @@
 </template>
 
 <script>
-  import { SurveyTypes } from '@/store/mutation-types'
+  import { TemplateTypes } from '@/store/mutation-types'
   import { mapGetters } from 'vuex'
   import { parseHeaders } from '@/lib/parse-headers'
 
   export default {
-    name: 'SurveyTable',
+    name: 'TemplateTable',
     props: {
       hidden: {
         default: function () { return [] }
@@ -65,7 +65,7 @@
     },
     computed: {
       ...mapGetters({
-        records: SurveyTypes.findAll
+        records: TemplateTypes.findAll
       }),
       _headers () {
         return parseHeaders(this.headers, this.hidden)
@@ -74,7 +74,7 @@
     methods: {
       filter (opts) {
         let def = { params: { max_results: this.max_results, page: this.page, sort: this.sort } }
-        this.$store.dispatch(SurveyTypes.findAll, Object.assign({}, def, opts))
+        this.$store.dispatch(TemplateTypes.findAll, Object.assign({}, def, opts))
       }
     },
     created () {
