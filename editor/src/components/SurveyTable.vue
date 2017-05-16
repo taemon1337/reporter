@@ -54,7 +54,7 @@
         default: 10
       },
       page: {
-        default: 1
+        default: 0
       },
       sort: {
         default: null

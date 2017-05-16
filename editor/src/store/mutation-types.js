@@ -11,16 +11,10 @@ export const SurveyTypes = {
   remove: 'Survey.remove'
 }
 
-export const TemplateTypes = {
-  save: 'Template.save',
-  findAll: 'Template.findAll',
-  find: 'Template.find',
-  active: 'Template.active',
-  remove: 'Template.remove'
-}
-
 export const ReportTypes = {
   save: 'Report.save',
   findAll: 'Report.findAll',
-  find: 'Report.find'
+  find: 'Report.find',
+  active: 'Report.active',
+  remove: 'Report.remove'
 }

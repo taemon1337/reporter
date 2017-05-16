@@ -1,11 +1,11 @@
 <template>
-  <div style='padding:35px;'>
-    <report-table></report-table>
+  <div>
+    <survey-form></survey-form>
   </div>
 </template>
 
 <script>
-  import ReportTable from '@/components/ReportTable'
+  import SurveyForm from '@/components/SurveyForm'
 
   export default {
     name: 'ReportPage',
@@ -13,7 +13,7 @@
       return {}
     },
     components: {
-      ReportTable
+      SurveyForm
     }
   }
 </script>

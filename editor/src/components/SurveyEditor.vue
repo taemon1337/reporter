@@ -139,15 +139,17 @@
         this.$refs.propertiesDialog.close()
       },
       removeSurvey () {
-        this.$store.dispatch(SurveyTypes.remove, Object.assign({}, this.survey))
+        let a = confirm('Are you sure you want to permanently delete this survey: ' + this.survey.title + '?')
+        if (a) {
+          this.$store.dispatch(SurveyTypes.remove, Object.assign({}, this.survey))
+          this.$router.back()
+        }
       },
       mountEditor () {
         let self = this
         self.editor = new SurveyEditor.SurveyEditor('editor-container', self.options)
   
         if (self.editor.renderedElement) {
-          window.editor = self.editor
-  
           // remove default toolbox as it renders weird with material-design-bootstrap
           self.editor.renderedElement.firstChild.children[0].remove()
 

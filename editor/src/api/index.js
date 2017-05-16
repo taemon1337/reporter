@@ -64,8 +64,8 @@ let reports = {
   findAll: function (opts) {
     return api.get(path.reports, opts)
   },
-  find: function (opts) {
-    return api.get(path.reports, opts)
+  find: function (id, opts) {
+    return api.get(path.reports + '/' + id, opts)
   },
   remove: function (data, opts) {
     return remove(path.reports, data, opts)

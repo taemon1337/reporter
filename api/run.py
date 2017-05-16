@@ -40,21 +40,23 @@ report_schema = {
   'title': {
     'type': 'string',
     'required': True,
+    'allow_blank': False,
     'unique': True
+  },
+  'subtitle': {
+    'type': 'string'
   },
   'state': {
     'type': 'string',
     'required': True,
-    'allowed': ['new','draft','review','approved']
+    'allowed': ['draft','review','approved','rejected']
   },
   'comments': {
-    'type': 'list'
-  },
-  'description': {
     'type': 'string'
   },
-  'data': {
-    'type': 'dict'
+  'report_json': {
+    'type': 'dict',
+    'default': '{}'
   }
 }
 
@@ -70,6 +72,7 @@ settings = {
   'RETURN_MEDIA_AS_BASE64_STRING': False,
   'EXTENDED_MEDIA_INFO': ['name','length','content_type'],
   'MEDIA_ENDPOINT': 'raw',
+  'CACHE_CONTROL': 'max-age:0,must-revalidate',
   'DATE_FORMAT': '%Y-%m-%d %H:%M:%S',
   'DOMAIN': {
     'autocompletes': {
