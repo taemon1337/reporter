@@ -8,7 +8,8 @@ export const SurveyTypes = {
   findAll: 'Survey.findAll',
   find: 'Survey.find',
   active: 'Survey.active',
-  remove: 'Survey.remove'
+  remove: 'Survey.remove',
+  default: 'Survey.default'
 }
 
 export const ReportTypes = {
@@ -16,5 +17,13 @@ export const ReportTypes = {
   findAll: 'Report.findAll',
   find: 'Report.find',
   active: 'Report.active',
-  remove: 'Report.remove'
+  remove: 'Report.remove',
+  download: 'Report.download',
+  activeReportJson: 'Report.activeReportJSON',
+  activeReportSurvey: 'Report.activeSurvey',
+  activeReportSurveyJson: 'Report.activeSurveyJSON'
+}
+
+export const RenderTypes = {
+  findAll: 'Render.findAll'
 }

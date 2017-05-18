@@ -1,4 +1,6 @@
 import axios from 'axios'
+import renderApi from './render'
+import { parseJson } from '@/lib/parse-json'
 
 let api = axios.create({
   baseURL: '/api',
@@ -69,6 +71,24 @@ let reports = {
   },
   remove: function (data, opts) {
     return remove(path.reports, data, opts)
+  },
+  download: function (report, opts) {
+    if (report.survey && report.survey.render && report.report_json) {
+      let data = {
+        template: {
+          _id: report.survey.render
+        },
+        data: parseJson(report.report_json),
+        options: {
+          'Content-Disposition': 'attachment; filename=' + report.title.replace(/[\s.]+/g, '_') + '.pdf'
+        }
+      }
+      return renderApi.render.download(data)
+    } else {
+      return new Promise(function (resolve, reject) {
+        reject(new Error('Report is missing survey or survey.render or report_json which are required in order to download'))
+      })
+    }
   }
 }
 

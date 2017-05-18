@@ -1,5 +1,20 @@
 <template>
   <div style='padding:35px;'>
+    <md-dialog ref='pdfDialog'>
+      <md-dialog-title>
+        {{ report.title }}
+        <span class='md-subhead'>{{ report.subtitle }}</span>
+      </md-dialog-title>
+      <md-dialog-content>
+        <div style='height:600px;width:500px;'>
+          <canvas id='reportPlaceholder'></canvas>
+        </div>
+      </md-dialog-content>
+      <md-dialog-actions>
+        <md-button class='md-raised md-primary' @click.native="$refs.pdfDialog.close()">Close</md-button>
+      </md-dialog-actions>
+    </md-dialog>
+    
     <md-dialog ref='messageDialog'>
       <md-dialog-title v-if="message.title">
         {{ message.title }}
@@ -13,69 +28,89 @@
     </md-dialog>
 
     <md-dialog ref='formDialog'>
-      <md-dialog-title>{{ report.title }}</md-dialog-title>
+      <md-dialog-title>
+        {{ report.title }}
+      </md-dialog-title>
       <md-dialog-content>
-        <div id='surveyContainer' v-if="survey">
+        <div id='surveyContainer'>
           <survey :survey='survey'></survey>
         </div>
       </md-dialog-content>
     </md-dialog>
     
-    <md-toolbar md-theme='sub' class='md-transparent'>
-      <h2 class="md-title">
-        {{ report.title }}
-      </h2>
+    <md-table-card style='padding:30px;'>
+      <md-toolbar md-theme='sub' class='md-transparent'>
+        <h3 style='margin-left:150px;flex: 1'>
+          {{ report.title || 'Report Creator' }}
+          <span class='md-subhead'>{{ report.subtitle }}</span>
+        </h3>
+  
+        <md-menu md-size="1" md-direction='bottom left' md-align-trigger>
+          <md-button class='md-icon-button' md-menu-trigger>
+            <md-icon>settings</md-icon>
+          </md-button>
+          <md-menu-content style='width:200px;'>
+            <md-menu-item @selected='removeReport'>
+              <span>Delete Report</span>
+              <md-icon>delete</md-icon>
+            </md-menu-item>
+          </md-menu-content>
+        </md-menu>
+      </md-toolbar>
       
-      <md-button class='md-raised md-primary' @click.native='saveProperties' :disabled='!report._id'>Save Report</md-button>
-      
-      <h3 style='margin-left:150px;flex: 1'>Report Creator</h3>
+      <form novalidate @submit.stop.prevent='saveProperties'>
+        <md-input-container v-if="report._id">
+          <label>Id</label>
+          <md-input :value="report._id" readonly></md-input>
+        </md-input-container>
+        
+        <md-input-container>
+          <label>{{ report.title || 'Report Title' }}</label>
+          <md-input v-model='form.title' required></md-input>
+        </md-input-container>
+  
+        <md-input-container>
+          <label>{{ report.subtitle || 'Subtitle' }}</label>
+          <md-input v-model='form.subtitle'></md-input>
+        </md-input-container>          
+  
+        <md-input-container>
+          <label>{{ report.comments | substring(20, 'Comments') }}</label>
+          <md-textarea v-model='form.comments'></md-textarea>
+        </md-input-container>
 
-      <md-menu md-size="1" md-direction='bottom left' md-align-trigger>
-        <md-button class='md-icon-button' md-menu-trigger>
-          <md-icon>settings</md-icon>
-        </md-button>
-        <md-menu-content style='width:200px;'>
-          <md-menu-item @selected='removeSurvey'>
-            <span>Delete Report</span>
-            <md-icon>delete</md-icon>
-          </md-menu-item>
-        </md-menu-content>
-      </md-menu>
-    </md-toolbar>
-    
-    <form novalidate @submit.stop.prevent='saveProperties'>
-      <md-input-container v-if="report._id">
-        <label>Id</label>
-        <md-input :value="report._id" readonly></md-input>
-      </md-input-container>
-      
-      <md-input-container>
-        <label>Report Title</label>
-        <md-input v-model='report.title'></md-input>
-      </md-input-container>
-
-      <md-input-container>
-        <label>Subtitle</label>
-        <md-input v-model='report.subtitle'></md-input>
-      </md-input-container>          
-
-      <md-input-container>
-        <label>Comments</label>
-        <md-textarea v-model='report.comments'></md-textarea>
-      </md-input-container>
-      
-      <md-button class='md-raised md-primary' type='submit'>Save Properties</md-button>
-      <md-button class='md-raised md-accent' type='button' @click.native='openReportDialog'>Start Report</md-button>
-    </form>
+        <md-input-container>
+          <label>{{ report.survey_id || 'Report Type' }}</label>
+          <md-select name='survey' v-model='form.survey' ref='selectedSurvey'>
+            <md-option value='' disabled>-- select survey --</md-option>
+            <div v-for='(opt, idx) in surveys' key='idx'>
+              <md-option :value='opt._id'>{{ opt.title }}</md-option>
+            </div>
+          </md-select>
+        </md-input-container>
+        
+        <md-button class='md-raised md-primary' type='submit'>Save Report</md-button>
+        <md-button class='md-raised md-accent' type='button' @click.native='openReportDialog'>Show Report Form</md-button>
+        <md-button class='md-raised md-accent' type='button' @click.native='previewPDF' :disabled='report.render'>Preview PDF</md-button>
+        <md-button class='md-raised md-accent' type='button' @click.native='downloadPDF' :disabled='report.render'>Download PDF</md-button>
+      </form>
+    </md-table-card>
   </div>
 </template>
 
 <script>
   import 'bootstrap'
   import 'bootstrap/dist/css/bootstrap.css'
+  import jsreport from 'jsreport-browser-client-dist/jsreport.js'
   import { Survey, Model } from 'survey-vue/survey.vue.js'
-  import { ReportTypes } from '@/store/mutation-types'
+  import { ReportTypes, SurveyTypes } from '@/store/mutation-types'
   import { mapGetters } from 'vuex'
+  import { substring } from '@/lib/substring'
+
+  jsreport.serverUrl = '/templates'
+
+  console.log('JS REPORT: ', jsreport)
+  window.jsreport = jsreport
 
   Survey.cssType = 'bootstrap'
 
@@ -83,18 +118,79 @@
     name: 'SurveyForm',
     data () {
       return {
-        survey: null,
+        surveyReady: false,
+        pdf: null,
+        form: {
+          title: undefined,
+          subtitle: undefined,
+          comments: undefined,
+          survey: undefined
+        },
         message: {}
       }
     },
+    filters: {
+      substring: substring
+    },
     computed: {
       ...mapGetters({
-        report: ReportTypes.active
-      })
+        report: ReportTypes.active,
+        selectedSurvey: ReportTypes.activeReportSurvey,
+        surveyJson: ReportTypes.activeReportSurveyJson,
+        reportJson: ReportTypes.activeReportJson,
+        surveys: SurveyTypes.findAll
+      }),
+      survey () {
+        let surveyData = this.surveyJson || { title: 'Loading Survey...' }
+        let reportData = this.reportJson || {}
+        let surveyId = this.selectedSurvey._id || ''
+        let saveCallback = this.saveSurvey
+        let select = this.$refs.selectedSurvey
+        let survey = new Model(surveyData)
+
+        if (select) {
+          select.changeValue(surveyId) // set the currently selected report survey id
+        }
+
+        survey.css.navigationButton = 'btn btn-primary'
+        survey.data = reportData
+        survey.onComplete.add(saveCallback)
+        survey.onValueChanged.add(saveCallback)
+        return survey
+      }
     },
     methods: {
       saveProperties (e) {
-        this.$store.dispatch(ReportTypes.save, Object.assign({}, this.report))
+        this.$store.dispatch(ReportTypes.save, Object.assign({}, this.report, this.form))
+      },
+      saveSurvey (e) {
+        this.$store.dispatch(ReportTypes.save, Object.assign({}, { _id: this.report._id, _etag: this.report._etag }, { report_json: JSON.stringify(e.data) }))
+      },
+      previewPDF () {
+        let request = {
+          template: {
+            _id: this.report.survey.render
+          },
+          data: this.report.report_json
+        }
+        this.$refs.pdfDialog.open()
+
+        jsreport.renderAsync(request).then(function (resp) {
+          window.location = resp.toDataURI()
+          // document.getElementById('reportPlaceholder')
+        }).catch(function (err) {
+          console.warn('Error getting report pdf', err)
+        })
+      },
+      downloadPDF () {
+        let filename = this.report.title.replace(/[\s.]+/g, '_') + '.pdf'
+        let request = {
+          template: {
+            _id: this.report.survey.render
+          },
+          data: this.report.report_json
+        }
+        jsreport.download(filename, request)
       },
       openReportDialog () {
         this.$refs.formDialog.open()
@@ -103,12 +199,7 @@
         this.$refs.messageDialog.close()
         this.message = {}
       },
-      mountSurvey () {
-        this.survey = new Model(this.report.report_json)
-        this.survey.css.navigationButton = 'btn btn-primary'
-        this.survey.showTitle = false
-      },
-      removeSurvey () {
+      removeReport () {
         let a = confirm('Are you sure you want to permanently delete this report: ' + this.report.title + '?')
         if (a) {
           this.$store.dispatch(ReportTypes.remove, this.report)
@@ -120,10 +211,9 @@
         this.$refs.messageDialog.open()
       }
     },
-    updated () {
-      this.mountSurvey()
-    },
     mounted () {
+      this.$store.dispatch(SurveyTypes.findAll)
+
       let id = this.$route.params.id
       if (id) {
         this.$store.dispatch(ReportTypes.find, id)

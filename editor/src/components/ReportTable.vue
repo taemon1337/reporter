@@ -47,7 +47,7 @@
         default: function () { return [] }
       },
       headers: {
-        default: function () { return ['title', 'version', 'description', { name: 'Last updated', field: '_updated' }] }
+        default: function () { return ['title', 'subtitle', 'state', { name: 'Last updated', field: '_updated' }] }
       },
       max_results: {
         default: 10

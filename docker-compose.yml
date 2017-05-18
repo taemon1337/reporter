@@ -7,7 +7,7 @@ services:
     environment:
       - appPath=/templates
       - authentication:enabled=true
-      - authentication:admin:password=admin
+      - authentication:admin:password=zdkei29djk5F20sk5kd0w
     volumes:
       - ./data/jsreport:/jsreport
     ports:

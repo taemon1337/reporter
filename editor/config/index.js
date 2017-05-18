@@ -37,6 +37,9 @@ module.exports = {
         changeOrigin: true,
         pathRewrite: {
           '/templates': ''
+        },
+        headers: {
+          'Authorization': 'Basic YWRtaW46emRrZWkyOWRqazVGMjBzazVrZDB3'
         }
       }
     },

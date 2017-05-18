@@ -34,8 +34,17 @@
           </md-input-container>          
 
           <md-input-container>
-            <label>{{ survey.description.substring(0,20) || 'Description' }}</label>
+            <label>{{ survey.description | substring(20, 'Description') }}</label>
             <md-textarea v-model='form.description'></md-textarea>
+          </md-input-container>
+          
+          <md-input-container>
+            <label>{{ survey.render || 'Report Renderer' }}</label>
+            <md-select name='render' v-model='form.render'>
+              <div v-for='(opt, idx) in renders' key='idx'>
+                <md-option :value='opt._id'>{{ opt.name }}</md-option>
+              </div>
+            </md-select>
           </md-input-container>
           
           <md-button type='submit' ref='savePropertiesButton' hidden>Save Properties</md-button>
@@ -92,27 +101,49 @@
   // import 'bootstrap-material-design/dist/css/ripples.min.css'
   import 'surveyjs-editor/surveyeditor.css'
   import * as SurveyEditor from 'surveyjs-editor'
-  import { SurveyTypes } from '@/store/mutation-types'
+  import { SurveyTypes, RenderTypes } from '@/store/mutation-types'
   import { mapGetters } from 'vuex'
+  import { substring } from '@/lib/substring'
   
   export default {
     name: 'survey-editor',
     data () {
       return {
-        form: {},
         message: {},
         options: {
-          showTestSurveyTab: false
+          showTestSurveyTab: false,
+          generateValidJSON: true
         }
       }
     },
     computed: {
       ...mapGetters({
-        survey: SurveyTypes.active
+        form: SurveyTypes.default,
+        survey: SurveyTypes.active,
+        surveyJson: SurveyTypes.surveyJson,
+        renders: RenderTypes.findAll
       }),
       undoable () {
         return this.editor && this.editor.toolbarItems()[0].enabled()
       }
+      // editor () {
+      //   let self = this
+      //   let surveyData = this.surveyJson
+      //   let editor = new SurveyEditor.SurveyEditor('editor-container', this.options)
+
+      //   if (editor.renderedElement) {
+      //     editor.renderedElement.firstChild.children[0].remove()
+      //     editor.saveSurveyFunc = function () {
+      //       self.saveSurvey(this.text)
+      //     }
+      //   }
+
+      //   editor.text = surveyData
+      //   return editor
+      // }
+    },
+    filters: {
+      substring: substring
     },
     methods: {
       saveProperties (e) {
@@ -146,8 +177,10 @@
         }
       },
       mountEditor () {
+        console.log('mounting editor...')
         let self = this
         self.editor = new SurveyEditor.SurveyEditor('editor-container', self.options)
+        window.editor = self.editor
   
         if (self.editor.renderedElement) {
           // remove default toolbox as it renders weird with material-design-bootstrap
@@ -169,6 +202,7 @@
       this.mountEditor()
     },
     mounted () {
+      this.$store.dispatch(RenderTypes.findAll)
       let id = this.$route.params.id
       if (id) {
         this.$store.dispatch(SurveyTypes.find, id)

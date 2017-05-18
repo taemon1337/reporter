@@ -1,5 +1,6 @@
 import { ReportTypes } from '../mutation-types'
 import Api from '@/api'
+import { parseJson } from '@/lib/parse-json'
 
 // init state
 const state = {
@@ -11,15 +12,18 @@ const state = {
 // getters
 const getters = {
   [ReportTypes.findAll]: state => state.all,
-  [ReportTypes.active]: state => state.current_index >= 0 ? state.all[state.current_index] : state.default
+  [ReportTypes.active]: state => state.current_index >= 0 ? state.all[state.current_index] : state.default,
+  [ReportTypes.activeReportSurvey]: state => state.current_index >= 0 ? state.all[state.current_index].survey : '',
+  [ReportTypes.activeReportSurveyJson]: state => state.current_index >= 0 ? parseJson(state.all[state.current_index].survey.pages_json) : {},
+  [ReportTypes.activeReportJson]: state => state.current_index >= 0 ? parseJson(state.all[state.current_index].report_json) : {}
 }
 
 // actions
 const actions = {
   [ReportTypes.save] ({ commit }, data) {
-    console.log('Saving report', data)
+    console.log('SAVING', data)
     Api.reports.save(data).then(function (resp) {
-      commit(ReportTypes.active, { report: Object.assign({}, data, resp.data) })
+      commit(ReportTypes.active, { report: resp.data })
     })
     .catch(function (err) {
       console.warn('Error saving report', data, err)
@@ -50,6 +54,9 @@ const actions = {
     }).catch(function (err) {
       console.log('Error removing report', err)
     })
+  },
+  [ReportTypes.download] ({ commit }, report) {
+    return Api.reports.download(report)
   }
 }
 

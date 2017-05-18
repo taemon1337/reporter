@@ -6,6 +6,7 @@ import ui from './modules/ui'
 import currentUser from './modules/current_user'
 import surveys from './modules/surveys'
 import reports from './modules/reports'
+import renders from './modules/renders'
 
 Vue.use(Vuex)
 
@@ -18,7 +19,8 @@ export default new Vuex.Store({
     ui,
     currentUser,
     surveys,
-    reports
+    reports,
+    renders
   },
   strict: debug
 })

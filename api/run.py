@@ -33,6 +33,9 @@ survey_schema = {
   'pages_json': {
     'type': 'string',
     'default': '{}'
+  },
+  'render': {
+    'type': 'string'
   }
 }
 
@@ -40,7 +43,6 @@ report_schema = {
   'title': {
     'type': 'string',
     'required': True,
-    'allow_blank': False,
     'unique': True
   },
   'subtitle': {
@@ -48,15 +50,24 @@ report_schema = {
   },
   'state': {
     'type': 'string',
-    'required': True,
+    'default': 'draft',
     'allowed': ['draft','review','approved','rejected']
   },
   'comments': {
-    'type': 'string'
+    'type': 'string',
+    'default': ''
   },
   'report_json': {
-    'type': 'dict',
+    'type': 'string',
     'default': '{}'
+  },
+  'survey': {
+    'type': 'objectid',
+    'data_relation': {
+      'resource': 'surveys',
+      'field': '_id',
+      'embeddable': True
+    }
   }
 }
 
@@ -74,6 +85,7 @@ settings = {
   'MEDIA_ENDPOINT': 'raw',
   'CACHE_CONTROL': 'max-age:0,must-revalidate',
   'DATE_FORMAT': '%Y-%m-%d %H:%M:%S',
+  'BANDWIDTH_SAVER': False, # always respond with full object (so resp after a save is same as GET)
   'DOMAIN': {
     'autocompletes': {
       'schema': autocomplete_schema
@@ -82,7 +94,8 @@ settings = {
       'schema': survey_schema
     },
     'reports': {
-      'schema': report_schema
+      'schema': report_schema,
+      'embedded_fields': ['survey']
     }
   }
 }

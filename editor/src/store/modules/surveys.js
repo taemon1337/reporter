@@ -10,8 +10,10 @@ const state = {
 
 // getters
 const getters = {
+  [SurveyTypes.default]: state => Object.assign({}, state.default),
   [SurveyTypes.findAll]: state => state.all,
-  [SurveyTypes.active]: state => state.current_index >= 0 ? state.all[state.current_index] : state.default
+  [SurveyTypes.active]: state => state.current_index >= 0 ? state.all[state.current_index] : state.default,
+  [SurveyTypes.surveyJson]: state => state.current_index >= 0 ? state.all[state.current_index].pages_json : '{}'
 }
 
 // actions
@@ -19,7 +21,7 @@ const actions = {
   [SurveyTypes.save] ({ commit }, data) {
     console.log('Saving survey', data)
     Api.surveys.save(data).then(function (resp) {
-      commit(SurveyTypes.active, { survey: Object.assign({}, data, resp.data) })
+      commit(SurveyTypes.active, { survey: resp.data })
     })
     .catch(function (err) {
       console.warn('Error saving survey', data, err)

@@ -5,6 +5,7 @@ import VueMaterial from 'vue-material'
 import App from './App'
 import router from './router'
 import store from './store'
+import '@/filters'
 
 Vue.config.productionTip = false
 Vue.use(VueMaterial)
