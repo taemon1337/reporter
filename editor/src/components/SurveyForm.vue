@@ -98,8 +98,8 @@
 <script>
   import 'bootstrap'
   import 'bootstrap/dist/css/bootstrap.css'
-  import 'bootstrap-material-design/dist/css/bootstrap-material-design.css'
-  import 'bootstrap-material-design/dist/css/ripples.min.css'
+  // import 'bootstrap-material-design/dist/css/bootstrap-material-design.css'
+  // import 'bootstrap-material-design/dist/css/ripples.min.css'
   import jsreport from 'jsreport-browser-client-dist/jsreport.js'
   import { Survey, Model } from 'survey-vue/survey.vue.js'
   import { ReportTypes, SurveyTypes } from '@/store/mutation-types'
