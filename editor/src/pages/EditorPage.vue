@@ -1,11 +1,11 @@
 <template>
   <div>
-    <survey-editor></survey-editor>
+    <survey-designer></survey-designer>
   </div>
 </template>
 
 <script>
-import SurveyEditor from '@/components/SurveyEditor'
+import SurveyDesigner from '@/components/SurveyDesigner'
 import * as SurveyVue from 'survey-vue'
 var Survey = SurveyVue.Survey
 Survey.cssType = 'bootstrap'
@@ -29,7 +29,7 @@ export default {
   },
   components: {
     Survey,
-    SurveyEditor
+    SurveyDesigner
   }
 }
 </script>
