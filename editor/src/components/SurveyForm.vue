@@ -6,12 +6,11 @@
         <span class='md-subhead'>{{ report.subtitle }}</span>
       </md-dialog-title>
       <md-dialog-content>
-        <div style='height:600px;width:500px;'>
-          <canvas id='reportPlaceholder'></canvas>
-        </div>
+        <object type="application/pdf" id='reportPlaceholder' :style='pdfStyle'></object>
       </md-dialog-content>
       <md-dialog-actions>
-        <md-button class='md-raised md-primary' @click.native="$refs.pdfDialog.close()">Close</md-button>
+        <md-button class='md-raised md-accent' type='button' @click.native='downloadPDF' :disabled='report.render'>Download PDF</md-button>
+        <md-button class='md-raised md-accent' @click.native="$refs.pdfDialog.close()">Close</md-button>
       </md-dialog-actions>
     </md-dialog>
     
@@ -92,7 +91,6 @@
         <md-button class='md-raised md-primary' type='submit'>Save Report</md-button>
         <md-button class='md-raised md-accent' type='button' @click.native='openReportDialog'>Show Report Form</md-button>
         <md-button class='md-raised md-accent' type='button' @click.native='previewPDF' :disabled='report.render'>Preview PDF</md-button>
-        <md-button class='md-raised md-accent' type='button' @click.native='downloadPDF' :disabled='report.render'>Download PDF</md-button>
       </form>
     </md-table-card>
   </div>
@@ -108,10 +106,6 @@
   import { substring } from '@/lib/substring'
 
   jsreport.serverUrl = '/templates'
-
-  console.log('JS REPORT: ', jsreport)
-  window.jsreport = jsreport
-
   Survey.cssType = 'bootstrap'
 
   export default {
@@ -156,7 +150,12 @@
         survey.data = reportData
         survey.onComplete.add(saveCallback)
         survey.onValueChanged.add(saveCallback)
+        this._survey = survey
+        window.self = this
         return survey
+      },
+      pdfStyle () {
+        return { height: window.innerHeight + 'px', width: window.innerWidth + 'px' }
       }
     },
     methods: {
@@ -176,8 +175,8 @@
         this.$refs.pdfDialog.open()
 
         jsreport.renderAsync(request).then(function (resp) {
-          window.location = resp.toDataURI()
-          // document.getElementById('reportPlaceholder')
+          let el = document.getElementById('reportPlaceholder')
+          el.data = resp.toDataURI()
         }).catch(function (err) {
           console.warn('Error getting report pdf', err)
         })
