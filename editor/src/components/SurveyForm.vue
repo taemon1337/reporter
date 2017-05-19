@@ -6,10 +6,9 @@
         <span class='md-subhead'>{{ report.subtitle }}</span>
       </md-dialog-title>
       <md-dialog-content>
-        <object type="application/pdf" id='reportPlaceholder' :style='pdfStyle'></object>
+        <object type="application/pdf" id='reportPlaceholder' :style='dialogStyle'></object>
       </md-dialog-content>
       <md-dialog-actions>
-        <md-button class='md-raised md-accent' type='button' @click.native='downloadPDF' :disabled='report.render'>Download PDF</md-button>
         <md-button class='md-raised md-accent' @click.native="$refs.pdfDialog.close()">Close</md-button>
       </md-dialog-actions>
     </md-dialog>
@@ -90,7 +89,7 @@
         
         <md-button class='md-raised md-primary' type='submit'>Save Report</md-button>
         <md-button class='md-raised md-accent' type='button' @click.native='openReportDialog'>Show Report Form</md-button>
-        <md-button class='md-raised md-accent' type='button' @click.native='previewPDF' :disabled='report.render'>Preview PDF</md-button>
+        <md-button class='md-raised md-accent' type='button' @click.native='previewPDF' :disabled='report.render'>View PDF</md-button>
       </form>
     </md-table-card>
   </div>
@@ -99,6 +98,8 @@
 <script>
   import 'bootstrap'
   import 'bootstrap/dist/css/bootstrap.css'
+  import 'bootstrap-material-design/dist/css/bootstrap-material-design.css'
+  import 'bootstrap-material-design/dist/css/ripples.min.css'
   import jsreport from 'jsreport-browser-client-dist/jsreport.js'
   import { Survey, Model } from 'survey-vue/survey.vue.js'
   import { ReportTypes, SurveyTypes } from '@/store/mutation-types'
@@ -106,7 +107,10 @@
   import { substring } from '@/lib/substring'
 
   jsreport.serverUrl = '/templates'
-  Survey.cssType = 'bootstrap'
+  // Survey.defaultBootstrapMaterialCss.navigationButton = "btn btn-green";
+  // Survey.defaultBootstrapMaterialCss.rating.item = "btn btn-default my-rating";
+  window.S = Survey
+  Survey.cssType = 'bootstrapmaterial'
 
   export default {
     name: 'SurveyForm',
@@ -154,7 +158,7 @@
         window.self = this
         return survey
       },
-      pdfStyle () {
+      dialogStyle () {
         return { height: window.innerHeight + 'px', width: window.innerWidth + 'px' }
       }
     },
