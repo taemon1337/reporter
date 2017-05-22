@@ -1,12 +1,10 @@
 <template>
-  <div style='padding:25px;'>
-    <h1>Survey Designer</h1>
-  </div>
+  <md-input></md-input>  
 </template>
 
 <script>
   export default {
-    name: 'SurveyDesigner',
+    name: 'TextInput',
     data () {
       return {}
     }

@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import SurveyDesigner from '@/components/SurveyDesigner'
+import SurveyDesigner from '@/components/SurveyDesigner/SurveyDesigner'
 import * as SurveyVue from 'survey-vue'
 var Survey = SurveyVue.Survey
 Survey.cssType = 'bootstrap'
