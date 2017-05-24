@@ -30,10 +30,14 @@
         {{ report.title }}
       </md-dialog-title>
       <md-dialog-content>
-        <div id='surveyContainer'>
+        <div id='surveyContainer' v-if="survey">
           <survey :survey='survey'></survey>
         </div>
       </md-dialog-content>
+      <md-dialog-actions>
+        <md-button class='md-raised md-accent' @click.native="$refs.formDialog.close()">Close</md-button>
+        <md-button class='md-raised md-accent' @click.native="survey.doNextPage">Next</md-button>
+      </md-dialog-actions>
     </md-dialog>
     
     <md-table-card style='padding:30px;'>
@@ -78,28 +82,31 @@
         </md-input-container>
 
         <md-input-container>
-          <label>{{ report.survey_id || 'Report Type' }}</label>
-          <md-select name='survey' v-model='form.survey' ref='selectedSurvey'>
+          <label>Report Type</label>
+          <md-select name='survey' :value='selectedSurveyId' @input='setFormSurvey'>
             <md-option value='' disabled>-- select survey --</md-option>
             <div v-for='(opt, idx) in surveys' key='idx'>
               <md-option :value='opt._id'>{{ opt.title }}</md-option>
             </div>
           </md-select>
         </md-input-container>
-        
+
         <md-button class='md-raised md-primary' type='submit'>Save Report</md-button>
-        <md-button class='md-raised md-accent' type='button' @click.native='openReportDialog'>Show Report Form</md-button>
-        <md-button class='md-raised md-accent' type='button' @click.native='previewPDF' :disabled='report.render'>View PDF</md-button>
+        <md-button class='md-raised md-accent' type='button' @click.native='openReportDialog' :disabled='!selectedSurvey'>Show Report Form</md-button>
+        <md-button class='md-raised md-accent' type='button' @click.native='previewPDF' :enabled='(report && report.render)'>View PDF</md-button>
       </form>
     </md-table-card>
   </div>
 </template>
 
 <script>
-  import 'bootstrap'
-  import 'bootstrap/dist/css/bootstrap.css'
+  // import 'bootstrap'
+  // import 'bootstrap/dist/css/bootstrap.css'
+  // import 'surveyjs-editor/surveyeditor.css'
   // import 'bootstrap-material-design/dist/css/bootstrap-material-design.css'
   // import 'bootstrap-material-design/dist/css/ripples.min.css'
+  // Survey.defaultBootstrapMaterialCss.navigationButton = "btn btn-green";
+  // Survey.defaultBootstrapMaterialCss.rating.item = "btn btn-default my-rating";
   import jsreport from 'jsreport-browser-client-dist/jsreport.js'
   import { Survey, Model } from 'survey-vue/survey.vue.js'
   import { ReportTypes, SurveyTypes } from '@/store/mutation-types'
@@ -107,16 +114,13 @@
   import { substring } from '@/lib/substring'
 
   jsreport.serverUrl = '/templates'
-  // Survey.defaultBootstrapMaterialCss.navigationButton = "btn btn-green";
-  // Survey.defaultBootstrapMaterialCss.rating.item = "btn btn-default my-rating";
-  window.S = Survey
-  Survey.cssType = 'bootstrapmaterial'
+  Survey.cssType = 'bootstrap'
 
   export default {
     name: 'SurveyForm',
     data () {
       return {
-        surveyReady: false,
+        survey: null,
         pdf: null,
         form: {
           title: undefined,
@@ -138,28 +142,11 @@
         reportJson: ReportTypes.activeReportJson,
         surveys: SurveyTypes.findAll
       }),
-      survey () {
-        let surveyData = this.surveyJson || { title: 'Loading Survey...' }
-        let reportData = this.reportJson || {}
-        let surveyId = this.selectedSurvey._id || ''
-        let saveCallback = this.saveSurvey
-        let select = this.$refs.selectedSurvey
-        let survey = new Model(surveyData)
-
-        if (select) {
-          select.changeValue(surveyId) // set the currently selected report survey id
-        }
-
-        survey.css.navigationButton = 'btn btn-primary'
-        survey.data = reportData
-        survey.onComplete.add(saveCallback)
-        survey.onValueChanged.add(saveCallback)
-        this._survey = survey
-        window.self = this
-        return survey
-      },
       dialogStyle () {
         return { height: window.innerHeight + 'px', width: window.innerWidth + 'px' }
+      },
+      selectedSurveyId () {
+        return this.selectedSurvey ? this.selectedSurvey._id : ''
       }
     },
     methods: {
@@ -169,10 +156,25 @@
       saveSurvey (e) {
         this.$store.dispatch(ReportTypes.save, Object.assign({}, { _id: this.report._id, _etag: this.report._etag }, { report_json: JSON.stringify(e.data) }))
       },
+      setFormSurvey (e) {
+        this.form.survey = e
+      },
+      buildSurvey () {
+        let surveyData = this.surveyJson || { title: 'Loading Survey...' }
+        let reportData = this.reportJson || {}
+        let saveCallback = this.saveSurvey
+        let survey = new Model(surveyData)
+
+        survey.css.navigationButton = 'btn btn-primary'
+        survey.data = reportData
+        survey.onComplete.add(saveCallback)
+        survey.onValueChanged.add(saveCallback)
+        return survey
+      },
       previewPDF () {
         let request = {
           template: {
-            _id: this.report.survey.render
+            _id: this.selectedSurvey.render
           },
           data: this.report.report_json
         }
@@ -189,7 +191,7 @@
         let filename = this.report.title.replace(/[\s.]+/g, '_') + '.pdf'
         let request = {
           template: {
-            _id: this.report.survey.render
+            _id: this.selectedSurvey.render
           },
           data: this.report.report_json
         }
@@ -214,7 +216,18 @@
         this.$refs.messageDialog.open()
       }
     },
+    beforeUpdate () {
+      if (this.report && this.selectedSurvey && this.reportJson) {
+        if (!this.survey) {
+          console.log('building survey...')
+          this.survey = this.buildSurvey()
+        }
+      } else {
+        this.survey = null
+      }
+    },
     mounted () {
+      window.self = this
       this.$store.dispatch(SurveyTypes.findAll)
 
       let id = this.$route.params.id

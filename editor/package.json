@@ -24,9 +24,12 @@
     "surveyjs-editor": "^0.12.4",
     "tether": "^1.4.0",
     "vue": "^2.2.6",
+    "vue-draggable": "^1.0.0-rc.2",
+    "vue-json-editor": "^1.1.1",
     "vue-material": "^0.7.1",
     "vue-pdf": "^1.2.1",
     "vue-router": "^2.3.1",
+    "vuedraggable": "^2.11.0",
     "vuex": "^2.3.1",
     "waves": "^0.1.1"
   },

@@ -39,8 +39,8 @@
           </md-input-container>
           
           <md-input-container>
-            <label>{{ survey.render || 'Report Renderer' }}</label>
-            <md-select name='render' v-model='form.render'>
+            <label>Report Renderer</label>
+            <md-select name='render' :value='survey.render' @input='setSurveyRender'>
               <div v-for='(opt, idx) in renders' key='idx'>
                 <md-option :value='opt._id'>{{ opt.name }}</md-option>
               </div>
@@ -97,10 +97,8 @@
 <script>
   import 'bootstrap'
   import 'bootstrap/dist/css/bootstrap.css'
-  // import 'bootstrap-material-design/dist/css/bootstrap-material-design.css'
-  // import 'bootstrap-material-design/dist/css/ripples.min.css'
   import 'surveyjs-editor/surveyeditor.css'
-  import * as SurveyEditor from 'surveyjs-editor'
+  import { SurveyEditor } from 'surveyjs-editor'
   import { SurveyTypes, RenderTypes } from '@/store/mutation-types'
   import { mapGetters } from 'vuex'
   import { substring } from '@/lib/substring'
@@ -126,21 +124,6 @@
       undoable () {
         return this.editor && this.editor.toolbarItems()[0].enabled()
       }
-      // editor () {
-      //   let self = this
-      //   let surveyData = this.surveyJson
-      //   let editor = new SurveyEditor.SurveyEditor('editor-container', this.options)
-
-      //   if (editor.renderedElement) {
-      //     editor.renderedElement.firstChild.children[0].remove()
-      //     editor.saveSurveyFunc = function () {
-      //       self.saveSurvey(this.text)
-      //     }
-      //   }
-
-      //   editor.text = surveyData
-      //   return editor
-      // }
     },
     filters: {
       substring: substring
@@ -158,6 +141,9 @@
           this.message = { title: 'Oops!', content: 'You must save the survey properties first' }
           this.$refs.messageDialog.open()
         }
+      },
+      setSurveyRender (val) {
+        this.form.render = val
       },
       closeMessageDialog () {
         this.$refs.messageDialog.close()
@@ -179,7 +165,7 @@
       mountEditor () {
         console.log('mounting editor...')
         let self = this
-        self.editor = new SurveyEditor.SurveyEditor('editor-container', self.options)
+        self.editor = new SurveyEditor('editor-container', self.options)
         window.editor = self.editor
   
         if (self.editor.renderedElement) {
@@ -212,6 +198,3 @@
     }
   }
 </script>
-
-<style scoped>
-</style>

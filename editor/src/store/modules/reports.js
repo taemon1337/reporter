@@ -14,7 +14,7 @@ const getters = {
   [ReportTypes.findAll]: state => state.all,
   [ReportTypes.active]: state => state.current_index >= 0 ? state.all[state.current_index] : state.default,
   [ReportTypes.activeReportSurvey]: state => state.current_index >= 0 ? state.all[state.current_index].survey : '',
-  [ReportTypes.activeReportSurveyJson]: state => state.current_index >= 0 ? parseJson(state.all[state.current_index].survey.pages_json) : {},
+  [ReportTypes.activeReportSurveyJson]: state => state.current_index >= 0 && state.all[state.current_index] && state.all[state.current_index].survey ? parseJson(state.all[state.current_index].survey.pages_json) : {},
   [ReportTypes.activeReportJson]: state => state.current_index >= 0 ? parseJson(state.all[state.current_index].report_json) : {}
 }
 

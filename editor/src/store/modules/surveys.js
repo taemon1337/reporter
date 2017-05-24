@@ -13,7 +13,7 @@ const getters = {
   [SurveyTypes.default]: state => Object.assign({}, state.default),
   [SurveyTypes.findAll]: state => state.all,
   [SurveyTypes.active]: state => state.current_index >= 0 ? state.all[state.current_index] : state.default,
-  [SurveyTypes.surveyJson]: state => state.current_index >= 0 ? state.all[state.current_index].pages_json : '{}'
+  [SurveyTypes.surveyJson]: state => state.current_index >= 0 && state.all[state.current_index] ? state.all[state.current_index].pages_json : '{}'
 }
 
 // actions

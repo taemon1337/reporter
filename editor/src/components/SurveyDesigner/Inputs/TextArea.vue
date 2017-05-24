@@ -1,23 +1,16 @@
 <template>
   <md-input-container>
     <label v-if="label">{{ label }}</label>
-    <md-input @input='onInput' :value='value' :type='type' :required='required' :disabled='disabled' :placeholder='placeholder'></md-input>  
+    <md-textarea @input='onInput' :value='value' :required='required' :disabled='disabled' :placeholder='placeholder'></md-textarea>
   </md-input-container>
 </template>
 
 <script>
   export default {
-    name: 'TextInput',
+    name: 'TextArea',
     props: {
       value: {
         required: true
-      },
-      type: {
-        type: String,
-        required: true,
-        default () {
-          return 'text'
-        }
       },
       label: {
         type: String

@@ -1,39 +1,33 @@
 <template>
   <div>
-    <survey-designer></survey-designer>
+    <div style='float:right'>
+      <md-button @click.native='editor=!editor'>
+        <md-icon>launch</md-icon>
+      </md-button>
+    </div>
+    <div v-if="editor">
+      <survey-editor></survey-editor>
+    </div>
+    <div v-else>
+      <survey-designer></survey-designer>
+    </div>
   </div>
 </template>
 
 <script>
-import SurveyDesigner from '@/components/SurveyDesigner/SurveyDesigner'
-import * as SurveyVue from 'survey-vue'
-var Survey = SurveyVue.Survey
-Survey.cssType = 'bootstrap'
-
-export default {
-  name: 'EditorPage',
-  data () {
-    var json = {
-      title: 'DFS Form Templates',
-      showProgressBar: 'top',
-      pages: [
-        {
-          questions: []
-        }
-      ]
+  import SurveyEditor from '@/components/SurveyEditor'
+  import SurveyDesigner from '@/components/SurveyDesigner/SurveyDesigner'
+  
+  export default {
+    name: 'EditorPage',
+    data () {
+      return {
+        editor: true
+      }
+    },
+    components: {
+      SurveyEditor,
+      SurveyDesigner
     }
-    var model = new SurveyVue.Model(json)
-    return {
-      survey: model
-    }
-  },
-  components: {
-    Survey,
-    SurveyDesigner
   }
-}
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-</style>
