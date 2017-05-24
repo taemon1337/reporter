@@ -143,7 +143,7 @@
         surveys: SurveyTypes.findAll
       }),
       dialogStyle () {
-        return { height: window.innerHeight + 'px', width: window.innerWidth + 'px' }
+        return { height: window.innerHeight + 'px', width: (window.innerWidth - 100) + 'px' }
       },
       selectedSurveyId () {
         return this.selectedSurvey ? this.selectedSurvey._id : ''
