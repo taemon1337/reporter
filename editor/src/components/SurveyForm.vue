@@ -67,18 +67,18 @@
         </md-input-container>
         
         <md-input-container>
-          <label>{{ report.title || 'Report Title' }}</label>
-          <md-input v-model='form.title' required></md-input>
+          <label>Report Title</label>
+          <md-input :value='report.title' @input='setFormTitle' required></md-input>
         </md-input-container>
   
         <md-input-container>
-          <label>{{ report.subtitle || 'Subtitle' }}</label>
-          <md-input v-model='form.subtitle'></md-input>
+          <label>Subtitle</label>
+          <md-input :value='report.subtitle' @input='setFormSubtitle'></md-input>
         </md-input-container>          
   
         <md-input-container>
-          <label>{{ report.comments | substring(20, 'Comments') }}</label>
-          <md-textarea v-model='form.comments'></md-textarea>
+          <label>Comments</label>
+          <md-textarea :value='report.comments' @input='setFormComments'></md-textarea>
         </md-input-container>
 
         <md-input-container>
@@ -122,12 +122,7 @@
       return {
         survey: null,
         pdf: null,
-        form: {
-          title: undefined,
-          subtitle: undefined,
-          comments: undefined,
-          survey: undefined
-        },
+        form: {},
         message: {}
       }
     },
@@ -156,8 +151,17 @@
       saveSurvey (e) {
         this.$store.dispatch(ReportTypes.save, Object.assign({}, { _id: this.report._id, _etag: this.report._etag }, { report_json: JSON.stringify(e.data) }))
       },
-      setFormSurvey (e) {
-        this.form.survey = e
+      setFormSurvey (val) {
+        this.form.survey = val
+      },
+      setFormTitle (val) {
+        this.form.title = val
+      },
+      setFormSubtitle (val) {
+        this.form.subtitle = val
+      },
+      setFormComments (val) {
+        this.form.comments = val
       },
       buildSurvey () {
         let surveyData = this.surveyJson || { title: 'Loading Survey...' }
@@ -174,7 +178,8 @@
       previewPDF () {
         let request = {
           template: {
-            _id: this.selectedSurvey.render
+            _id: this.selectedSurvey.render,
+            recipe: 'phantom-pdf'
           },
           data: this.report.report_json
         }
@@ -191,7 +196,8 @@
         let filename = this.report.title.replace(/[\s.]+/g, '_') + '.pdf'
         let request = {
           template: {
-            _id: this.selectedSurvey.render
+            _id: this.selectedSurvey.render,
+            recipe: 'phantom-pdf'
           },
           data: this.report.report_json
         }

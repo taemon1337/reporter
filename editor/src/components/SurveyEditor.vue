@@ -24,18 +24,18 @@
           </md-input-container>
           
           <md-input-container>
-            <label>{{ survey.title || 'Title' }}</label>
-            <md-input v-model='form.title'></md-input>
+            <label>Title</label>
+            <md-input :value='survey.title' @input='setFormTitle'></md-input>
           </md-input-container>
 
           <md-input-container>
-            <label>{{ survey.version || 'Version' }}</label>
-            <md-input v-model='form.version'></md-input>
+            <label>Version</label>
+            <md-input :value='survey.version' @input='setFormVersion'></md-input>
           </md-input-container>          
 
           <md-input-container>
-            <label>{{ survey.description | substring(20, 'Description') }}</label>
-            <md-textarea v-model='form.description'></md-textarea>
+            <label>Description</label>
+            <md-textarea :value='survey.description' @input='setFormDescription'></md-textarea>
           </md-input-container>
           
           <md-input-container>
@@ -108,6 +108,7 @@
     data () {
       return {
         message: {},
+        form: {},
         options: {
           showTestSurveyTab: false,
           generateValidJSON: true
@@ -116,7 +117,6 @@
     },
     computed: {
       ...mapGetters({
-        form: SurveyTypes.default,
         survey: SurveyTypes.active,
         surveyJson: SurveyTypes.surveyJson,
         renders: RenderTypes.findAll
@@ -144,6 +144,15 @@
       },
       setSurveyRender (val) {
         this.form.render = val
+      },
+      setFormTitle (val) {
+        this.form.title = val
+      },
+      setFormVersion (val) {
+        this.form.version = val
+      },
+      setFormDescription (val) {
+        this.form.description = val
       },
       closeMessageDialog () {
         this.$refs.messageDialog.close()
