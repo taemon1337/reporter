@@ -2,7 +2,10 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import * as actions from './actions'
 import * as getters from './getters'
-import components from './modules/survey-designer-components'
+import ui from './modules/ui'
+import currentUser from './modules/current_user'
+import schemes from './modules/schemes'
+import reports from './modules/reports'
 
 Vue.use(Vuex)
 
@@ -12,7 +15,10 @@ export default new Vuex.Store({
   actions,
   getters,
   modules: {
-    components: components
+    ui,
+    currentUser,
+    schemes,
+    reports
   },
   strict: debug
 })

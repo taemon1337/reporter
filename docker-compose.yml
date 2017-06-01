@@ -14,16 +14,16 @@ services:
       - 5488:5488
     networks:
       - working
-  editor:
-    image: node:alpine
-    working_dir: /editor
-    volumes:
-      - ./editor:/editor
-    networks:
-      - working
-    command: npm run dev
-    ports:
-      - 8080:8080
+  # editor:
+  #   image: node:alpine
+  #   working_dir: /editor
+  #   volumes:
+  #     - ./editor:/editor
+  #   networks:
+  #     - working
+  #   command: npm run dev
+  #   ports:
+  #     - 8080:8080
   api:
     build: ./api
     volumes:
@@ -32,18 +32,18 @@ services:
     command: python -u run.py
     networks:
       - working
-#  app:
-#    build: ./app
-#    volumes:
-#      - ./app:/app
-#    working_dir: /app
-#    command: node run.js
-#    depends_on:
-#      - api
-#    networks:
-#      - working
-#    ports:
-#      - 8080:8080
+  app:
+    build: ./app
+    volumes:
+      - ./app:/app
+    working_dir: /app
+    command: npm run dev
+    depends_on:
+      - api
+    networks:
+      - working
+    ports:
+      - 8080:8080
   mongo:
     image: mongo
     volumes:

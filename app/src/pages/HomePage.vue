@@ -1,12 +1,12 @@
 <template>
   <div>
-      <h2>Properties</h2>
+    <h1>Home Page</h1>
   </div>
 </template>
 
 <script>
   export default {
-    name: 'SurveyDesignerProperties',
+    name: 'HomePage',
     data () {
       return {}
     }

@@ -5,6 +5,26 @@ MONGO_HOST = getenv("MONGO_HOST","mongo")
 MONGO_PORT = int(getenv("MONGO_PORT", "27017"))
 MONGO_DBNAME = getenv("MONGO_DBNAME","report-db")
 
+scheme_schema = {
+  'name': {
+    'type': 'string',
+    'required': True,
+    'unique': True
+  },
+  'description': {
+    'type': 'string',
+    'default': ''
+  },
+  'version': {
+    'type': 'string',
+    'default': '1.0'
+  },
+  'schema_json': {
+    'type': 'string',
+    'default': '{}'
+  }
+}
+
 autocomplete_schema = {
   'key': {
     'type': 'string',
@@ -14,28 +34,6 @@ autocomplete_schema = {
   'value_json': {
     'type': 'string',
     'required': True
-  }
-}
-
-survey_schema = {
-  'title': {
-    'type': 'string',
-    'required': True,
-    'unique': True
-  },
-  'version': {
-    'type': 'string',
-    'required': True
-  },
-  'description': {
-    'type': 'string'
-  },
-  'pages_json': {
-    'type': 'string',
-    'default': '{}'
-  },
-  'render': {
-    'type': 'string'
   }
 }
 
@@ -61,10 +59,10 @@ report_schema = {
     'type': 'string',
     'default': '{}'
   },
-  'survey': {
+  'scheme': {
     'type': 'objectid',
     'data_relation': {
-      'resource': 'surveys',
+      'resource': 'schemes',
       'field': '_id',
       'embeddable': True
     }
@@ -90,12 +88,12 @@ settings = {
     'autocompletes': {
       'schema': autocomplete_schema
     },
-    'surveys': {
-      'schema': survey_schema
+    'schemes': {
+      'schema': scheme_schema
     },
     'reports': {
       'schema': report_schema,
-      'embedded_fields': ['survey']
+      'embedded_fields': ['scheme']
     }
   }
 }

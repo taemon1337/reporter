@@ -1,6 +1,6 @@
 # app
 
-> Vue Material Form Designer
+> Json schema and reporter gui
 
 ## Build Setup
 
