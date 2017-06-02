@@ -8,16 +8,16 @@
         <v-tabs-item ripple href='#jsoneditor'>Editor</v-tabs-item>
       </v-tabs-bar>
       <v-tabs-content id='properties'>
-        <schema-form :schema='scheme_schema' :value='scheme' @input='saveRecord'></schema-form>
+        <schema-form :schema='scheme_schema' :value='scheme' @save='saveRecord'></schema-form>
       </v-tabs-content>
       <v-tabs-content id='jsoneditor'>
-        <json-editor :value='scheme.schema_json' @input='saveSchema'></json-editor>
+        <json-editor :value='scheme.jsonschema' @input='saveSchema'></json-editor>
       </v-tabs-content>
       <v-tabs-content id='schematable'>
-        <schema-table :value='scheme.schema_json' @input='saveSchema'></schema-table>
+        <schema-table :value='scheme.jsonschema' @input='saveSchema'></schema-table>
       </v-tabs-content>
     </v-tabs>
-    <ajv-errors :model='cache'></ajv-errors>
+    <ajv-errors :model='scheme.jsonschema'></ajv-errors>
   </div>
 </template>
 
@@ -39,16 +39,15 @@
           type: 'object',
           properties: {
             name: {
-              type: 'string'
+              type: 'string',
+              tag: 'text-input'
             },
             description: {
-              type: 'string'
+              type: 'string',
+              tag: 'text-box'
             }
           },
           required: ['name']
-        },
-        cache: {
-          schema_json: {}
         }
       }
     },
@@ -59,14 +58,13 @@
     },
     methods: {
       saveRecord (record) {
-        console.log('SAVE RECORD CALLED: ', record)
+        this.$store.dispatch(SchemeTypes.save, record)
       },
       saveSchema (schema) {
-        console.log('SAVE SCHEMA CALLED: ', schema)
+        this.$store.dispatch(SchemeTypes.save, Object.assign({}, this.scheme, { jsonschema: schema }))
       }
     },
     mounted () {
-      console.log('MOUNTED', this.$route.params)
       this.$store.dispatch(SchemeTypes.find, this.$route.params.id)
     },
     components: {

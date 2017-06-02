@@ -5,7 +5,9 @@ import App from './App'
 import router from './router'
 import Vuetify from 'vuetify'
 import store from './store'
+import Vue2Filters from 'vue2-filters'
 
+Vue.use(Vue2Filters)
 Vue.use(Vuetify)
 
 Vue.config.productionTip = false

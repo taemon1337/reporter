@@ -3,8 +3,20 @@
     <h3 v-badge="{ value: schemes.length, left: true }">
       Schemas
     </h3>
-    <grid :cards='[newCard]'></grid>
-    <grid :cards='schemes' :map='mapToCard'></grid>
+    <grid :cards='[newCard]'>
+      <template slot='title' scope='props'>{{ props.card.title }}</template>
+      <template slot='subtitle' scope='props'>{{ props.card.subtitle }}</template>
+    </grid>
+    <grid :cards='schemes' :map='mapToCard' :actions='cardActions'>
+      <template slot='title' scope='props'>{{ props.card.name }}</template>
+      <template slot='subtitle' scope='props'>{{ props.card.description }}</template>
+      <template slot='action' scope='props'>
+        <v-btn @click.native='$router.push(props.action.route)' flat class='white--text'>
+          <v-icon left light>{{ props.action.icon }}</v-icon>
+          {{ props.action.title }}
+        </v-btn>
+      </template>
+    </grid>
   </div>
 </template>
 
@@ -19,18 +31,31 @@
       return {
         newCard: {
           title: 'Add new scheme',
+          subtitle: 'Do it',
           click: '/schemes/new',
           actions: [{ title: 'Create scheme now', icon: 'add' }]
         },
         mapToCard: {
-          title: 'name'
-        }
+          title: 'name',
+          subtitle: 'description'
+        },
+        cardActions: [
+          {
+            title: 'Open',
+            click: function (router, scheme) {
+              router.push('/schemes/' + scheme._id)
+            }
+          }
+        ]
       }
     },
     computed: {
       ...mapGetters({
         schemes: SchemeTypes.findAll
       })
+    },
+    created () {
+      this.$store.dispatch(SchemeTypes.findAll)
     },
     components: {
       Grid

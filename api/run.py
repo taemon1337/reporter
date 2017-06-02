@@ -19,9 +19,26 @@ scheme_schema = {
     'type': 'string',
     'default': '1.0'
   },
-  'schema_json': {
-    'type': 'string',
-    'default': '{}'
+  'jsonschema': {
+    'type': 'dict',
+    'schema': {
+      'title': {
+        'type': 'string',
+        'required': True
+      },
+      'type': {
+        'type': 'string',
+        'allowed': ['object','array','string']
+      },
+      'properties': {
+        'type': 'dict',
+        'default': {}
+      },
+      'required': {
+        'type': 'list',
+        'default': []
+      }
+    }
   }
 }
 

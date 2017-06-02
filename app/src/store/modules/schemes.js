@@ -1,9 +1,21 @@
 import { SchemeTypes } from '../mutation-types'
 import Api from '@/api'
 
+const defaultscheme = {
+  title: 'Default Scheme',
+  type: 'object',
+  properties: {
+    name: {
+      type: 'string',
+      tag: 'text-input'
+    }
+  },
+  required: ['name']
+}
+
 // init state
 const state = {
-  default: {},
+  default: { name: '', description: '', jsonschema: defaultscheme },
   all: [],
   current_index: -1
 }
@@ -17,7 +29,6 @@ const getters = {
 // actions
 const actions = {
   [SchemeTypes.save] ({ commit }, data) {
-    console.log('Saving scheme', data)
     Api.schemes.save(data).then(function (resp) {
       commit(SchemeTypes.active, { scheme: resp.data })
     })
