@@ -6,6 +6,7 @@ import ui from './modules/ui'
 import currentUser from './modules/current_user'
 import schemes from './modules/schemes'
 import reports from './modules/reports'
+import layouts from './modules/layouts'
 
 Vue.use(Vuex)
 
@@ -18,6 +19,7 @@ export default new Vuex.Store({
     ui,
     currentUser,
     schemes,
+    layouts,
     reports
   },
   strict: debug

@@ -13,6 +13,7 @@ let api = axios.create({
 
 const path = {
   schemes: '/schemes',
+  layouts: '/layouts',
   reports: '/reports',
   autocompletes: '/autocompletes'
 }
@@ -29,7 +30,7 @@ let save = function (base, data, opts) {
       }
     }
     opts.headers['If-Match'] = data._etag
-    return api.patch(base + '/' + id, attrs, opts)
+    return api.put(base + '/' + id, attrs, opts)
   } else {
     return api.post(base, data, opts)
   }
@@ -56,6 +57,21 @@ let schemes = {
   },
   remove: function (data, opts) {
     return remove(path.schemes, data, opts)
+  }
+}
+
+let layouts = {
+  save: function (data, opts) {
+    return save(path.layouts, data, opts)
+  },
+  findAll: function (opts) {
+    return api.get(path.layouts, opts)
+  },
+  find: function (id, opts) {
+    return api.get(path.layouts + '/' + id, opts)
+  },
+  remove: function (data, opts) {
+    return remove(path.layouts, data, opts)
   }
 }
 
@@ -101,6 +117,7 @@ let autocompletes = {
 export default {
   api: api,
   schemes: schemes,
+  layouts: layouts,
   reports: reports,
   autocompletes: autocompletes
 }

@@ -12,6 +12,9 @@
           <router-link tag='span' to="/schemes">Schemas</router-link>
         </v-toolbar-item>
         <v-toolbar-item>
+          <router-link tag='span' to="/layouts">Layouts</router-link>
+        </v-toolbar-item>
+        <v-toolbar-item>
           <router-link tag='span' to="/reports">Reports</router-link>
         </v-toolbar-item>
         <v-toolbar-item>

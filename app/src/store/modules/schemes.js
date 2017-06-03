@@ -23,7 +23,10 @@ const state = {
 // getters
 const getters = {
   [SchemeTypes.findAll]: state => state.all,
-  [SchemeTypes.active]: state => state.current_index >= 0 ? state.all[state.current_index] : state.default
+  [SchemeTypes.active]: state => state.current_index >= 0 ? state.all[state.current_index] : state.default,
+  [SchemeTypes.layout]: state => state.all.filter(function (s) {
+    return s.name === 'Layout Schema'
+  })[0]
 }
 
 // actions

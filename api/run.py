@@ -42,6 +42,26 @@ scheme_schema = {
   }
 }
 
+
+layout_schema = {
+  'name': {
+    'type': 'string',
+    'required': True,
+    'unique': True
+  },
+  'description': {
+    'type': 'string',
+    'default': ''
+  },
+  'version': {
+    'type': 'string',
+    'default': '1.0'
+  },
+  'template': {
+    'type': 'string'
+  }
+}
+
 autocomplete_schema = {
   'key': {
     'type': 'string',
@@ -83,6 +103,14 @@ report_schema = {
       'field': '_id',
       'embeddable': True
     }
+  },
+  'layout': {
+    'type': 'objectid',
+    'data_relation': {
+      'resource': 'layouts',
+      'field': '_id',
+      'embeddable': True
+    }
   }
 }
 
@@ -108,9 +136,12 @@ settings = {
     'schemes': {
       'schema': scheme_schema
     },
+    'layouts': {
+      'schema': layout_schema
+    },
     'reports': {
       'schema': report_schema,
-      'embedded_fields': ['scheme']
+      'embedded_fields': ['scheme', 'layout']
     }
   }
 }

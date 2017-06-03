@@ -6,7 +6,17 @@ export const SchemeTypes = {
   findAll: 'Scheme.findAll',
   find: 'Scheme.find',
   save: 'Scheme.save',
-  active: 'Scheme.active'
+  remove: 'Scheme.remove',
+  active: 'Scheme.active',
+  layout: 'Schema.layout'
+}
+
+export const LayoutTypes = {
+  findAll: 'Layout.findAll',
+  find: 'Layout.find',
+  save: 'Layout.save',
+  remove: 'Layout.remove',
+  active: 'Layout.active'
 }
 
 export const ReportTypes = {
