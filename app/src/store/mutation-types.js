@@ -1,5 +1,9 @@
 export const GlobalTypes = {
-  GET_CURRENT_USER: 'GET_CURRENT_USER'
+  GET_CURRENT_USER: 'GET_CURRENT_USER',
+  colors: 'Colors.all',
+  schemaColor: 'Colors.schema',
+  layoutColor: 'Colors.layout',
+  reportColor: 'Colors.report'
 }
 
 export const SchemeTypes = {

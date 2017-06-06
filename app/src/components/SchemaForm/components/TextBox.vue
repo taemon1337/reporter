@@ -1,6 +1,6 @@
 <template>
   <div class="input-group--focused input-group input-group--dark input-group--text-field">
-    <label>{{ label }}</label>
+    <label v-if='label'>{{ label }}</label>
     <div class='input-group__input'>
       <textarea :value='value' :rows='rows' :placeholder='placeholder' @input='inputChanged'></textarea>
     </div>
@@ -23,7 +23,7 @@
       rows: {
         type: Number,
         default () {
-          return 6
+          return 3
         }
       },
       label: {

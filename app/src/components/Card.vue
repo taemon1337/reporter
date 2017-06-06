@@ -47,7 +47,6 @@
     },
     methods: {
       getRoute (action) {
-        console.log(this.card, action.route)
         return typeof action.route === 'function' ? action.route(this.card) : action.route
       }
     },

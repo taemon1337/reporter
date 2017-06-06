@@ -58,7 +58,8 @@ layout_schema = {
     'default': '1.0'
   },
   'template': {
-    'type': 'string'
+    'type': 'string',
+    'default': '<h3>Default Template</h3>'
   }
 }
 

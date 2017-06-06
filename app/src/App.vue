@@ -1,5 +1,5 @@
 <template>
-  <v-app id="example-2">
+  <v-app>
     <v-toolbar fixed class="indigo darken-4" light>
       <router-link to='/home'>
         <v-btn icon light>
@@ -49,14 +49,3 @@
     }
   }
 </script>
-
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>

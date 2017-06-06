@@ -1,5 +1,5 @@
 <template>
-  <v-text-field class="input-group--focused" :value='value' :type='type' :label='label || name' @input='inputChanged'></v-text-field>
+  <v-text-field class="input-group--focused" :value='value' :type='type' :placeholder='placeholder' :label='label' @input='inputChanged'></v-text-field>
 </template>
 
 <script>

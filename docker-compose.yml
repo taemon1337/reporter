@@ -14,6 +14,12 @@ services:
       - 5488:5488
     networks:
       - working
+  tinymce:
+    image: nginx:alpine
+    volumes:
+      - ./app/node_modules/tinymce/:/usr/share/nginx/html:ro # tinymce needs some static files served, so nginx in addition to webpack dev's proxyTable in config/index.js
+    networks:
+      - working
   # editor:
   #   image: node:alpine
   #   working_dir: /editor

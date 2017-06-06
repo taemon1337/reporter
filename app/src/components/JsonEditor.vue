@@ -21,6 +21,9 @@
             modes: ['tree', 'text', 'view']
           }
         }
+      },
+      background: {
+        default: ''
       }
     },
     data () {
@@ -30,9 +33,20 @@
       let self = this
       this.editor = new JsonEditor(this.$refs.editor, this.opts, this.value)
 
+      if (this.editor) {
+        let cls = this.editor.contentOuter.parentElement.children[0].className
+        this.editor.contentOuter.parentElement.children[0].className = cls + ' ' + this.background
+      }
+
       this.editor.options.onChange = function () {
         self.$emit('input', self.editor.get())
       }
     }
   }
 </script>
+
+<style scoped>
+  .jsoneditor-menu {
+    background-color: #e8e8e8;
+  }  
+</style>

@@ -2,11 +2,9 @@
   <div>
     <span v-for="(val, key) in obj" key='key'>
       <v-layout row v-if='isFieldType(val.type)'>
-        <v-flex xs4>
-          <v-subheader>{{ labelize(val, key) | capitalize }}</v-subheader>
-        </v-flex>
-        <v-flex xs8>
-          <component :is='val.tag' :name='key' :label='labelize(val, key)' :value='getFieldValue(key)' @input='inputChanged'></component>
+        <v-flex xs12>
+          <h6>{{ labelize(val, key) | capitalize }}</h6>
+          <component :is='val.tag' :name='key' :value='getFieldValue(key)' :placeholder='"enter " + labelize(val, key) + "..."' @input='inputChanged'></component>
         </v-flex>
       </v-layout>
     </span>
@@ -14,8 +12,9 @@
 </template>
 
 <script>
-  import TextInput from '@/components/TextInput'
-  import TextBox from '@/components/TextBox'
+  import TextInput from 'sf/components/TextInput'
+  import TextBox from 'sf/components/TextBox'
+  import HtmlEditor from 'sf/components/HtmlEditor'
 
   export default {
     name: 'SchemaTree',
@@ -54,7 +53,8 @@
     },
     components: {
       TextInput,
-      TextBox
+      TextBox,
+      HtmlEditor
     }
   }
 </script>

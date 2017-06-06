@@ -1,5 +1,5 @@
 <template>
-  <v-card class='blue darken-1 white--text mt-3'>
+  <v-card :class='color'>
     <v-card-title v-if='title'>
       <v-toolbar class="transparent elevation-0" light>
         <v-toolbar-title class="hidden-sm-and-down">{{ title }}</v-toolbar-title>
@@ -15,9 +15,17 @@
       </v-toolbar>
     </v-card-title>
     <v-card-text>
-      <v-data-table v-bind:headers="headers" :items="items" hide-actions class="blue ligthen-4 dark--text elevation-20">
+      <v-data-table v-bind:headers="headers" :items="items" v-model="selected" selected-key="name" select-all hide-actions>
         <template slot="items" scope="props">
+          <td>
+            <v-checkbox primary hide-details v-model="props.selected"></v-checkbox>
+          </td>
           <td v-for='header in headers' :key='header.value'>{{ props.item[header.value] }}</td>
+          <td v-if='recordActions'>
+            <v-btn v-for='(action, index) in recordActions(props.item)' key='index' icon :class='action.color || "primary"' :title='action.help' @click.native='action.click'>
+              <v-icon>{{ action.icon }}</v-icon>
+            </v-btn>
+          </td>
         </template>
       </v-data-table>
     </v-card-text>
@@ -28,6 +36,7 @@
   export default {
     name: 'DataTable',
     props: {
+      color: {},
       title: {},
       headers: {
         type: Array,
@@ -39,10 +48,15 @@
       },
       actions: {
         type: Array
+      },
+      recordActions: {
+        type: Function
       }
     },
     data () {
-      return {}
+      return {
+        selected: []
+      }
     }
   }
 </script>

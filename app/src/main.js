@@ -6,7 +6,9 @@ import router from './router'
 import Vuetify from 'vuetify'
 import store from './store'
 import Vue2Filters from 'vue2-filters'
+import VueTinymce from 'vue-tinymce'
 
+Vue.use(VueTinymce)
 Vue.use(Vue2Filters)
 Vue.use(Vuetify)
 

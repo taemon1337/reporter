@@ -32,6 +32,18 @@ module.exports = {
         target: 'http://api:8080',
         changeOrigin: true
       },
+      '/themes': {
+        target: 'http://tinymce',
+        changeOrigin: true
+      },
+      '/skins': {
+        target: 'http://tinymce',
+        changeOrigin: true
+      },
+      '/plugins': {
+        target: 'http://tinymce',
+        changeOrigin: true
+      },
       '/templates': {
         target: 'http://jsreport:5488',
         changeOrigin: true,
