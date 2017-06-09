@@ -1,10 +1,10 @@
 <template>
   <div>
     <v-layout row wrap>
-      <card :card='newCard' :actions='newActions' :color='schemaColor.light'>
+      <card class='mt-3' :card='newCard' :actions='newActions' :color='schemaColor.dark'>
         <template slot='title' scope='props'>{{ props.card.title }}</template>
       </card>
-      <card v-for="(card, index) in schemes" :color='schemaColor.light' :card='card' :title='card.name' :subtitle='card.description' :actions='actions' :key='card._id'></card>
+      <card class='mt-3' v-for="(card, index) in schemes" :color='schemaColor.light' :card='card' :title='card.name' :subtitle='card.description' :actions='actions' :key='card._id'></card>
     </v-layout>
   </div>
 </template>

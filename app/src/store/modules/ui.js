@@ -5,7 +5,7 @@ const state = {
   colors: {
     schemas: {
       light: 'blue lighten-2 white--text',
-      primary: 'blue darken-2 white--text',
+      primary: 'blue white--text',
       dark: 'blue darken-3 white--text'
     },
     layouts: {

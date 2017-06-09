@@ -12,7 +12,11 @@ export const SchemeTypes = {
   save: 'Scheme.save',
   remove: 'Scheme.remove',
   active: 'Scheme.active',
-  layout: 'Schema.layout'
+  layoutSchema: 'Schema.layout',
+  reportSchema: 'Schema.report',
+  defaultSchema: 'Schema.default',
+  validationSchema: 'Schema.validation',
+  schemeSchema: 'Schema.scheme_schema'
 }
 
 export const LayoutTypes = {

@@ -14,15 +14,14 @@
     "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs"
   },
   "dependencies": {
+    "debounce": "^1.0.2",
     "handlebars": "^4.0.10",
     "jsoneditor": "^5.7.0",
     "jsreport": "^1.7.0",
     "tinymce": "^4.6.3",
     "vue": "^2.3.3",
-    "vue-html5-editor": "^1.1.1",
     "vue-router": "^2.3.1",
-    "vue-tinymce": "^1.0.5",
-    "vue2-editor": "^2.0.24",
+    "vue-timeago": "^3.3.2",
     "vue2-filters": "^0.1.9"
   },
   "devDependencies": {

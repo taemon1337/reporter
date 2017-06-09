@@ -1,8 +1,8 @@
 <template>
-  <v-flex xs12 sm6 md3 lg2>
+  <v-flex xs12 sm6 md4 lg3>
     <v-card>
       <v-card-column>
-        <v-card-row height="75px" :class="topClass">
+        <v-card-row height="150px" :class="topClass">
           <v-card-text>
             <v-card-title m0>
               {{ title || card.title }}

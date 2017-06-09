@@ -6,7 +6,6 @@
   import jsreport from 'jsreport-browser-client-dist/jsreport.js'
 
   jsreport.serverUrl = '/templates'
-  window.jsreport = jsreport
 
   export default {
     name: 'LayoutRender',

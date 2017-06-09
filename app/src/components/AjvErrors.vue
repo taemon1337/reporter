@@ -1,40 +1,37 @@
 <template>
   <div>
-    <v-alert success v-bind:value="validSchema">The schema is valid Json Schema</v-alert>
-    <v-alert error v-bind:value="!validSchema">Invalid Schema Definition {{ error }}</v-alert>
+    <div v-if="valid" class='green--text'>
+      <v-icon class='green--text'>check_circle</v-icon>{{ message }}
+    </div>
+    <div v-else>
+      <v-alert error value='true'>
+        <ul>
+          <li v-for='(err, i) in errors' key='i'>{{ err.message }}</li>
+        </ul>
+      </v-alert>
+    </div>
   </div>
 </template>
 
 <script>
-  import Ajv from 'ajv'
-
   export default {
     name: 'AjvErrors',
     props: {
-      model: {
+      valid: {
+        type: Boolean,
         required: true
+      },
+      message: {
+        type: String,
+        default: 'The schema is valid'
+      },
+      errors: {
+        type: Array,
+        default () { return [] }
       }
     },
     data () {
-      return {
-        error: null
-      }
-    },
-    computed: {
-      validSchema () {
-        let schema = this.model
-
-        try {
-          this.ajv.compile(schema)
-        } catch (err) {
-          this.error = err
-          return false
-        }
-        return true
-      }
-    },
-    created () {
-      this.ajv = new Ajv({ allErrors: true })
+      return {}
     }
   }
 </script>

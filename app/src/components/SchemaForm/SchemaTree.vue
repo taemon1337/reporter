@@ -4,7 +4,7 @@
       <v-layout row v-if='isFieldType(val.type)'>
         <v-flex xs12>
           <h6>{{ labelize(val, key) | capitalize }}</h6>
-          <component :is='val.tag' :name='key' :value='getFieldValue(key)' :placeholder='"enter " + labelize(val, key) + "..."' @input='inputChanged'></component>
+          <component :is='val.tag' :name='key' :value='getFieldValue(key)' :placeholder='"enter " + labelize(val, key) + "..."' v-bind='val.tag_options' @input='inputChanged'></component>
         </v-flex>
       </v-layout>
     </span>
@@ -15,6 +15,7 @@
   import TextInput from 'sf/components/TextInput'
   import TextBox from 'sf/components/TextBox'
   import HtmlEditor from 'sf/components/HtmlEditor'
+  import MultiSelect from 'sf/components/MultiSelect'
 
   export default {
     name: 'SchemaTree',
@@ -28,7 +29,7 @@
         required: true
       },
       obj: {
-        type: [Object, Array, String],
+        type: [Array, Object, String],
         required: true
       }
     },
@@ -43,7 +44,6 @@
         return val.label || val.name || name
       },
       inputChanged (val, key) {
-        console.log(key + ' changed to ' + val)
         this.value[key] = val
         this.$emit('input', this.value)
       },
@@ -54,7 +54,8 @@
     components: {
       TextInput,
       TextBox,
-      HtmlEditor
+      HtmlEditor,
+      MultiSelect
     }
   }
 </script>

@@ -7,7 +7,9 @@ import Vuetify from 'vuetify'
 import store from './store'
 import Vue2Filters from 'vue2-filters'
 import VueTinymce from 'vue-tinymce'
+import VueTimeago from 'vue-timeago'
 
+Vue.use(VueTimeago, { locale: 'en-US', locales: { 'en-US': require('vue-timeago/locales/en-US.json') } })
 Vue.use(VueTinymce)
 Vue.use(Vue2Filters)
 Vue.use(Vuetify)

@@ -39,6 +39,19 @@ scheme_schema = {
         'default': []
       }
     }
+  },
+  'refs': {
+    'type': 'dict',
+    'schema': {
+      'scheme': {
+        'type': 'objectid',
+        'data_relation': {
+          'resource': 'schemes',
+          'field': 'name',
+          'embeddable': True
+        }
+      }
+    }
   }
 }
 
@@ -101,16 +114,21 @@ report_schema = {
     'type': 'objectid',
     'data_relation': {
       'resource': 'schemes',
-      'field': '_id',
-      'embeddable': True
+      'field': 'name',
+      'embeddable': False
     }
   },
-  'layout': {
-    'type': 'objectid',
-    'data_relation': {
-      'resource': 'layouts',
-      'field': '_id',
-      'embeddable': True
+  'layouts': {
+    'type': 'list',
+    'schema': {
+      'layout': {
+        'type': 'objectid',
+        'data_relation': {
+          'resource': 'layouts',
+          'field': 'name',
+          'embeddable': False
+        }
+      }
     }
   }
 }
@@ -142,7 +160,7 @@ settings = {
     },
     'reports': {
       'schema': report_schema,
-      'embedded_fields': ['scheme', 'layout']
+      'embedded_fields': ['schemes', 'layouts']
     }
   }
 }

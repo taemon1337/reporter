@@ -1,7 +1,24 @@
 import { SchemeTypes } from '../mutation-types'
 import Api from '@/api'
 
-const defaultscheme = {
+const validationSchema = {
+  title: 'Validation Schema',
+  properties: {
+    title: {
+      type: 'string',
+      tag: 'text-input'
+    },
+    properties: {
+      type: 'object'
+    },
+    required: {
+      type: 'array'
+    }
+  },
+  required: ['title', 'properties']
+}
+
+const defaultSchema = {
   title: 'Default Scheme',
   type: 'object',
   properties: {
@@ -13,9 +30,28 @@ const defaultscheme = {
   required: ['name']
 }
 
+// the schemes endpoint schema
+const schemeSchema = {
+  title: 'Scheme Schema',
+  type: 'object',
+  properties: {
+    name: {
+      type: 'string',
+      tag: 'text-input'
+    },
+    description: {
+      type: 'string',
+      tag: 'text-box'
+    }
+  },
+  required: ['name']
+}
+
 // init state
 const state = {
-  default: { name: '', description: '', jsonschema: defaultscheme },
+  default: { name: '', description: '', jsonschema: defaultSchema },
+  schemeSchema: schemeSchema,
+  validationSchema: validationSchema,
   all: [],
   current_index: -1
 }
@@ -24,9 +60,11 @@ const state = {
 const getters = {
   [SchemeTypes.findAll]: state => state.all,
   [SchemeTypes.active]: state => state.current_index >= 0 ? state.all[state.current_index] : state.default,
-  [SchemeTypes.layout]: state => state.all.filter(function (s) {
-    return s.name === 'Layout Schema'
-  })[0]
+  [SchemeTypes.layoutSchema]: state => state.all.filter(function (s) { return s.name === 'Layout Schema' })[0],
+  [SchemeTypes.reportSchema]: state => state.all.filter(function (s) { return s.name === 'Report Schema' })[0],
+  [SchemeTypes.defaultSchema]: state => Object.assign({}, state.default.jsonschema),
+  [SchemeTypes.validationSchema]: state => state.validationSchema,
+  [SchemeTypes.schemeSchema]: state => state.schemeSchema
 }
 
 // actions

@@ -9,11 +9,15 @@
       </v-btn>
       <v-toolbar-title :class="color">{{ title }}</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn icon :light='light' :dark='dark'>
-        <v-icon>account_circle</v-icon>
+      <slot name='toolbar-buttons'></slot>
+      <v-btn v-if='saving' :light='light' :dark='dark' disabled>
+        <span class='fa fa-spinner fa-spin'></span> Saving...
       </v-btn>
-      <v-btn icon :light='light' :dark='dark'>
-        <v-icon>favorite</v-icon>
+      <v-btn v-else-if='hasChanges' class='green darken-1 white--text' @click.native='debounceSave'>
+        <v-icon class='white--text mr-1'>save</v-icon> Save
+      </v-btn>
+      <v-btn v-else-if='record._id' class='green darken-2 white--text' disabled>
+        <v-icon class='green--text mr-1'>check</v-icon> Saved
       </v-btn>
       <v-menu>
         <v-btn icon="icon" slot="activator" :light='light' :dark='dark'>
@@ -36,20 +40,42 @@
     <main>
       <slot name='content'></slot>
     </main>
-    <!--<v-footer></v-footer>-->
+    <v-footer :class='color' :light='light' :dark='dark' style='height:100px;'>
+      <div class='white pr-3 pl-3 pt-1 pb-1'>
+        <div v-if='hasChanges' class='red--text'>
+          <v-icon class='red--text'>info</v-icon> Not saved!
+        </div>
+        <div v-else-if='record._id' class='green--text'>
+          <v-icon class='green--text'>check_circle</v-icon>Saved <timeago :since='updatedAt'></timeago> at {{ record._updated }}
+        </div>
+        <ajv-errors :valid='validFormData' message='The form data is valid' :errors='formValidator.errors'></ajv-errors>
+        <slot name='footer'></slot>
+      </div>
+    </v-footer>
   </v-app>
 </template>
 
 <script>
+  import AjvErrors from '@/components/AjvErrors'
+  import debounce from 'debounce'
+  import Ajv from 'ajv'
+
   export default {
     name: 'EditFrame',
     props: {
+      title: {
+        type: String
+      },
+      schema: {
+        type: Object
+      },
       record: {
         type: Object,
         required: true
       },
-      title: {
-        type: String
+      cache: {
+        type: Object,
+        required: true
       },
       light: {
         type: Boolean,
@@ -66,16 +92,53 @@
     },
     data () {
       return {
+        formValidator: new Ajv({ allErrors: true }),
+        saving: false,
         drawer: false
       }
     },
+    computed: {
+      validFormData () {
+        if (this.schema) {
+          return this.formValidator.validate(this.schema, this.cache)
+        } else {
+          return false
+        }
+      },
+      hasChanges () {
+        return JSON.stringify(this.cache) !== JSON.stringify(this.record)
+      },
+      updatedAt () {
+        return new Date(this.record._updated)
+      }
+    },
     methods: {
+      debounceSave: debounce(function () {
+        let self = this
+        this.saving = true
+        this.$emit('save')
+        setTimeout(function () {
+          if (self.saving) {
+            self.saving = false
+          }
+        }, 5000)
+      }, 500),
       emitRemove () {
         let a = confirm('Are you sure you want to remove ' + this.title + '?')
         if (a) {
-          this.$emit('remove', this.record)
+          this.$emit('remove')
         }
       }
+    },
+    watch: {
+      cache () {
+        if (!this.hasChanges) {
+          this.saving = false
+        }
+      }
+    },
+    components: {
+      AjvErrors
     }
   }
 </script>

@@ -3,9 +3,12 @@
 </template>
 
 <script>
+  import debounce from 'debounce'
   import 'jsoneditor/dist/jsoneditor.css'
   import JsonEditor from 'jsoneditor/dist/jsoneditor-minimalist.js'
   import Ajv from 'ajv'
+  import { mapGetters } from 'vuex'
+  import { SchemeTypes } from '@/store/mutation-types'
 
   export default {
     name: 'JsonEditor',
@@ -29,6 +32,19 @@
     data () {
       return {}
     },
+    computed: {
+      ...mapGetters({
+        schema: SchemeTypes.validation
+      })
+    },
+    watch: {
+      value () {
+        if (this.editor) {
+          this.editor.set(this.value) // ISSUE: changed triggered but UI refreshes and input focus is lost
+          this.editor.expandAll()
+        }
+      }
+    },
     mounted () {
       let self = this
       this.editor = new JsonEditor(this.$refs.editor, this.opts, this.value)
@@ -38,9 +54,10 @@
         this.editor.contentOuter.parentElement.children[0].className = cls + ' ' + this.background
       }
 
-      this.editor.options.onChange = function () {
-        self.$emit('input', self.editor.get())
-      }
+      this.editor.options.onChange = debounce(function () {
+        let val = self.editor.get()
+        self.$emit('input', val)
+      }, 1400)
     }
   }
 </script>
