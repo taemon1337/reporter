@@ -5,6 +5,21 @@ MONGO_HOST = getenv("MONGO_HOST","mongo")
 MONGO_PORT = int(getenv("MONGO_PORT", "27017"))
 MONGO_DBNAME = getenv("MONGO_DBNAME","report-db")
 
+json_schema = {
+  'type': {
+    'type': 'string',
+    'allowed': ['object','array','string']
+  },
+  'properties': {
+    'type': 'dict',
+    'default': {}
+  },
+  'required': {
+    'type': 'list',
+    'default': []
+  }
+}
+
 scheme_schema = {
   'name': {
     'type': 'string',
@@ -29,6 +44,25 @@ scheme_schema = {
       'type': {
         'type': 'string',
         'allowed': ['object','array','string']
+      },
+      'definitions': {
+        'type': 'list',
+        'default': [],
+        'schema': {
+          'field': {
+            'type': 'string',
+            'required': True
+          },
+          'ref': {
+            'type': 'objectid',
+            'required': True,
+            'data_relation': {
+              'resource': 'schemes',
+              'field': 'name',
+              'embeddable': True
+            }
+          }
+        }
       },
       'properties': {
         'type': 'dict',

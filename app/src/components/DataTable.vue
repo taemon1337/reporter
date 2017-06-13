@@ -6,7 +6,7 @@
         <v-spacer></v-spacer>
         <v-toolbar-items v-if='actions'>
           <v-toolbar-item v-for='(action, index) in actions' key='index'>
-            <v-btn @click.native='$router.push(action.route)'>
+            <v-btn @click.native='buttonClicked(action)'>
               <v-icon v-if='action.icon'>{{ action.icon }}</v-icon>
               <span v-if='action.text'>{{ action.text }}</span>
             </v-btn>
@@ -56,6 +56,15 @@
     data () {
       return {
         selected: []
+      }
+    },
+    methods: {
+      buttonClicked (action) {
+        if (action.route) {
+          this.$router.push(action.route)
+        } else if (action.click) {
+          action.click.apply(this)
+        }
       }
     }
   }

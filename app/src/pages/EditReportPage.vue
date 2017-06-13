@@ -9,6 +9,7 @@
           <v-tabs-bar :class='reportColor.primary' slot='activators'>
             <v-tabs-slider :class='reportColor.dark'></v-tabs-slider>
             <v-tabs-item ripple href='#builder'>Designer</v-tabs-item>
+            <v-tabs-item ripple href='#dataentry'>Data Entry</v-tabs-item>
             <v-tabs-item ripple href='#preview'>Live Preview</v-tabs-item>
             <v-tabs-item ripple href='#properties'>Properties</v-tabs-item>
           </v-tabs-bar>
@@ -16,6 +17,13 @@
             <v-layout>
               <v-flex xs12>
                 <report-builder :value='cache' :color='reportColor.primary' @input='saveRecord'></report-builder>
+              </v-flex>
+            </v-layout>
+          </v-tabs-content>
+          <v-tabs-content id='dataentry'>
+            <v-layout>
+              <v-flex xs12>
+                <schema-form :schema='computedReportSchema' v-model='computedReportJson' @input='saveReportJson'></schema-form>
               </v-flex>
             </v-layout>
           </v-tabs-content>
@@ -53,7 +61,9 @@
     props: ['id'],
     data () {
       return {
-        cache: {}
+        cache: {
+          report_json: '{}'
+        }
       }
     },
     computed: {
@@ -67,6 +77,13 @@
       },
       computedReportSchema () {
         return this.reportSchema ? this.reportSchema.jsonschema : {}
+      },
+      computedReportJson () {
+        try {
+          return JSON.parse(this.cache.report_json || '{}')
+        } catch (err) {
+          console.warn('Error parsing report_json', err)
+        }
       }
     },
     methods: {
@@ -82,6 +99,9 @@
       },
       saveRecord (record) {
         this.cache = record
+      },
+      saveReportJson (reportJson) {
+        this.cache.report_json = JSON.stringify(reportJson)
       }
     },
     mounted () {

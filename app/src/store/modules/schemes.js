@@ -42,6 +42,19 @@ const schemeSchema = {
     description: {
       type: 'string',
       tag: 'text-box'
+    },
+    definitions: {
+      type: 'object',
+      tag: 'definitions-form',
+      properties: {
+        field: {
+          type: 'string'
+        },
+        ref: {
+          type: 'string'
+        }
+      },
+      required: ['field', 'schemeId']
     }
   },
   required: ['name']

@@ -1,5 +1,5 @@
 <template>
-  <v-select :label='label' :items='items' :value='selected' :item-text='textfield' :item-value='valuefield' @input='inputChanged' multiple chips max-height='auto' autocomplete>
+  <v-select :label='label' :items='items' :value='selected' :item-text='textfield' :item-value='valuefield' @input='inputChanged' chips max-height='auto' autocomplete>
     <template slot='selection' scope='data'>
       <v-chip close @input='data.parent.selectItem(data.item)' @click.native.stop class='chip--select-multi' :key='data.item'>{{ data.item.name }}</v-chip>
     </template>
@@ -16,9 +16,15 @@
 </template>
 
 <script>
+  import { SchemeTypes } from '@/store/mutation-types'
+  import { mapGetters } from 'vuex'
+
   export default {
-    name: 'TextInput',
+    name: 'SchemaSelect',
     props: {
+      label: {
+        type: String
+      },
       value: {
         type: String,
         required: true
@@ -27,31 +33,26 @@
         type: String,
         required: true
       },
-      items: {
-        type: Array,
-        required: true
-      },
       textfield: {
-        type: String,
-        default: 'name'
+        type: String
       },
       valuefield: {
-        type: String,
-        default: '_id'
-      },
-      label: {
-        type: String,
-        default: 'Select'
+        type: String
       }
     },
     data () {
       return {
-        selected: []
+        selected: null
       }
+    },
+    computed: {
+      ...mapGetters({
+        items: SchemeTypes.findAll
+      })
     },
     methods: {
       inputChanged (val) {
-        this.$emit('input', val, this.name)
+        this.$emit('input', val)
       }
     }
   }

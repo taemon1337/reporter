@@ -1,8 +1,8 @@
 <template>
   <v-card :class="color">
     <v-card-text>
-      <v-container fluid v-for="(obj, key) in schema" key='key' style='padding:5px 50px;'>
-        <schema-tree :name='key' :obj='obj' :value='cache' @input='emitInput'></schema-tree>
+      <v-container fluid style='padding:5px 50px;'>
+        <schema-tree name='properties' :properties='schema.properties' :value='cache' @input='emitInput'></schema-tree>
       </v-container>
     </v-card-text>
   </v-card>
